@@ -1,0 +1,16 @@
+Subject: Your have been warned
+
+Hello {USERNAME},
+
+A warning has been issued to you on "{SITENAME}" by {WARNING_POSTER}.
+
+----------------------------
+Reason: {WARNING}
+Warning length: {WARNING_LENGTH}
+----------------------------
+
+If the total number of active warnings will reach {WARNINGS_COUNT} your account will be banned automatically.
+
+If you have any questions about this warning, please contact {WARNING_POSTER}.
+
+{EMAIL_SIG}

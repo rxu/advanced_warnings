@@ -1,0 +1,17 @@
+Subject: Your account has been banned
+
+Hello {USERNAME},
+
+Your account on "{SITENAME}" has been banned by {WARNING_POSTER}.
+Ban has been issued for the {WARNINGS_COUNT} warnings.
+
+----------------------------
+Reason: {WARNING}
+Ban length: {WARNING_LENGTH}
+----------------------------
+
+Your account may be unbanned after the some of your warning(s) will be expired and the total number of active warnings will be less than {WARNINGS_COUNT}.
+
+If you have any questions about this ban, please contact {WARNING_POSTER}.
+
+{EMAIL_SIG}

@@ -1,0 +1,23 @@
+Subject: Warning edited
+
+Hello {USERNAME},
+
+A warning has been previously issued to you on "{SITENAME}" was edited by {WARNING_POSTER}.
+
+Old warning status:
+----------------------------
+Type: {WARNING_TYPE_OLD}
+Reason: {WARNING_OLD}
+Warning length: {WARNING_LENGTH_OLD}
+----------------------------
+
+New warning status:
+----------------------------
+Type: {WARNING_TYPE}
+Reason: {WARNING}
+Warning length: {WARNING_LENGTH}
+----------------------------
+
+If you have any questions about this, please contact {WARNING_POSTER}.
+
+{EMAIL_SIG}
