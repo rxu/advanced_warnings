@@ -41,10 +41,14 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'BAN'					=> 'Бан',
-	'BANNED_UNTIL'			=> 'до %s',
+	'BANNED_UNTIL'			=> 'до: %s',
 	'BANNED'				=> 'Забанен',
 	'BANNED_PERMANENTLY'	=> 'Бессрочно',
-	'BANNED_BY_X_WARNINGS'	=> 'за %d предупреждений',
+	'BANNED_BY_X_WARNINGS'	=> array(
+		1 => 'за %d предупреждение',
+		2 => 'за %d предупреждения',
+		3 => 'за %d предупреждений',
+	),
 	'CANNOT_WARN_FOUNDER'	=> 'Вы не можете предупредить основателя.',
 	'EDIT_WARNING'			=> 'Редактировать предупреждение',
 	'LIST_WARNINGS'			=> array(
@@ -55,7 +59,11 @@ $lang = array_merge($lang, array(
 	'WARNING'				=> 'Предупреждение',
 	'WARNING_TYPE'			=> 'Вид',
 	'WARNINGS'				=> 'Предупреждения',
-	'WARNING_BAN'			=> 'Забанен за %d предупреждений. Причина последнего предупреждения: %s',
+	'WARNING_BAN'			=> array(
+		1 => 'Забанен за %d предупреждение. Причина последнего предупреждения: %s',
+		2 => 'Забанен за %d предупреждения. Причина последнего предупреждения: %s',
+		3 => 'Забанен за %d предупреждений. Причина последнего предупреждения: %s',
+	),
 	'WARNINGS_EXPLAIN'		=> 'Список предупреждений',
 	'WARNING_EXPIRES'		=> 'Истекает',
 	'WARNING_EXPIRED'		=> 'Истекло',

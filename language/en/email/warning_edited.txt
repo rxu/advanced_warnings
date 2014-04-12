@@ -1,4 +1,4 @@
-Subject: Warning edited
+Subject: {SITENAME} - warning edited
 
 Hello {USERNAME},
 

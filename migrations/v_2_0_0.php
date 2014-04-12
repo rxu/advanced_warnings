@@ -26,7 +26,7 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 		return 	array(
 			'add_columns' => array(
 				$this->table_prefix . 'users' => array(
-					'user_ban_id'		=> array('UINT', 0),
+					'user_ban_id'		=> array('BOOL', 0),
 				),
 
 				$this->table_prefix . 'warnings' => array(

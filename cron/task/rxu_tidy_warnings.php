@@ -105,29 +105,39 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$this->db->sql_query($sql);
 			}
 
-			$sql = 'SELECT user_ban_id FROM ' . USERS_TABLE . ' 
-				WHERE user_ban_id <> 0 
-					AND user_warnings < ' . $this->config['warnings_for_ban'];
+			// Try to get storage engine type to detect if transactions are supported
+			// to apply proper bans selection (MyISAM/InnoDB)
+			$operator = '<';
+			$table_status = $this->db->get_table_status(USERS_TABLE);
+			if (isset($table_status['Engine']))
+			{
+				$operator = ($table_status['Engine'] === 'MyISAM') ? '<' : '<=';
+			}
+
+			$sql = 'SELECT u.user_id, b.ban_userid FROM ' . USERS_TABLE . ' u, ' . BANLIST_TABLE . " b
+				WHERE u.user_ban_id = 1 
+					AND u.user_warnings $operator " . $this->config['warnings_for_ban'] . '
+					AND u.user_id = b.ban_userid';
 			$result = $this->db->sql_query($sql);
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$unban_list[] = (int) $row['user_ban_id'];
+				$unban_list[] = (int) $row['ban_userid'];
 			}
 			$this->db->sql_freeresult($result);
 
 			if (sizeof($unban_list))
 			{
 				$sql = 'UPDATE ' . USERS_TABLE . ' SET user_ban_id = 0
-					WHERE ' . $this->db->sql_in_set('user_ban_id', $unban_list);
+					WHERE ' . $this->db->sql_in_set('user_id', $unban_list);
 				$this->db->sql_query($sql);
-
+/*
 				// Delete stale bans (partially borrowed from user_unban())
 				$sql = 'DELETE FROM ' . BANLIST_TABLE . '
 					WHERE ban_end < ' . time() . '
 						AND ban_end <> 0';
 				$this->db->sql_query($sql);
-
+*/
 				$sql = 'SELECT u.username AS unban_info, u.user_id
 					FROM ' . USERS_TABLE . ' u, ' . BANLIST_TABLE . ' b
 					WHERE ' . $this->db->sql_in_set('b.ban_id', $unban_list) . '
@@ -149,12 +159,12 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$this->db->sql_query($sql);
 
 				// Add to moderator log, admin log and user notes
-				add_log('admin', 'LOG_UNBAN_' . strtoupper($mode), $l_unban_list);
-				add_log('mod', 0, 0, 'LOG_UNBAN_' . strtoupper($mode), $l_unban_list);
+				add_log('admin', 'LOG_UNBAN_USER', $l_unban_list);
+				add_log('mod', 0, 0, 'LOG_UNBAN_USER', $l_unban_list);
 
 				foreach ($user_ids_ary as $user_id)
 				{
-					add_log('user', $user_id, 'LOG_UNBAN_' . strtoupper($mode), $l_unban_list);
+					add_log('user', $user_id, 'LOG_UNBAN_USER', $l_unban_list);
 				}
 			}
 

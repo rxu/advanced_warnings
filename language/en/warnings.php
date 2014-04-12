@@ -44,7 +44,10 @@ $lang = array_merge($lang, array(
 	'BANNED_UNTIL'			=> 'until %s',
 	'BANNED'				=> 'Banned',
 	'BANNED_PERMANENTLY'	=> 'Permanently',
-	'BANNED_BY_X_WARNINGS'	=> 'by %d warnings',
+	'BANNED_BY_X_WARNINGS'	=> array(
+		1 => 'by %d warning',
+		2 => 'by %d warnings',
+	),
 	'CANNOT_WARN_FOUNDER'	=> 'You cannot warn founder.',
 	'EDIT_WARNING'			=> 'Edit warning',
 	'LIST_WARNINGS'			=> array(
@@ -54,7 +57,10 @@ $lang = array_merge($lang, array(
 	'WARNING'				=> 'Warning',
 	'WARNING_TYPE'			=> 'Warning type',
 	'WARNINGS'				=> 'Warnings',
-	'WARNING_BAN'			=> 'Banned by %d warnings. Last warning reason: %s',
+	'WARNING_BAN'			=> array(
+		1 => 'Banned by %d warning. Last warning reason: %s',
+		2 => 'Banned by %d warnings. Last warning reason: %s',
+	),
 	'WARNINGS_EXPLAIN'		=> 'Warnings list',
 	'WARNING_EXPIRES'		=> 'Warning expires',
 	'WARNING_EXPIRED'		=> 'Expired',

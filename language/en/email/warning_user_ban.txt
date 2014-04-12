@@ -1,4 +1,4 @@
-Subject: Your account has been banned
+Subject: {SITENAME} - your account has been banned
 
 Hello {USERNAME},
 

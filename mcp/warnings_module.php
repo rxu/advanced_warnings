@@ -322,7 +322,7 @@ class warnings_module
 		if (!$warning_id && !$user_row['user_ban_id'] && ($user_row['user_warnings'] + 1 == $config['warnings_for_ban']))
 		{
 			$warn_type = WARNING_BAN;
-			$warning = sprintf($user->lang['WARNING_BAN'], ($user_row['user_warnings'] + 1), $warning);
+			$warning = $user->lang('WARNING_BAN', ((int) $user_row['user_warnings'] + 1), $warning);
 		}
  
 		if ($warning && $action == 'add_warning')
@@ -355,7 +355,7 @@ class warnings_module
 					else if ($warn_type == WARNING_BAN)
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
-						$user_ban_id = user_ban('user', $ban, 0, 0, 0, $warning, $warning);
+						$user_ban_id = (int) user_ban('user', $ban, 0, 0, 0, $warning, $warning);
 
 						if ($user_ban_id)
 						{
@@ -552,7 +552,7 @@ class warnings_module
 		if (!$warning_id && !$user_row['user_ban_id'] && ($user_row['user_warnings'] + 1 == $config['warnings_for_ban']))
 		{
 			$warn_type = WARNING_BAN;
-			$warning = sprintf($user->lang['WARNING_BAN'], ($user_row['user_warnings'] + 1), $warning);
+			$warning = $user->lang('WARNING_BAN', ((int) $user_row['user_warnings'] + 1), $warning);
 		}
  
 		if ($warning && $action == 'add_warning')
@@ -585,7 +585,7 @@ class warnings_module
 					else if ($warn_type == WARNING_BAN)
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
-						$user_ban_id = user_ban('user', $ban, 0, 0, 0, $warning, $warning);
+						$user_ban_id = (int) user_ban('user', $ban, 0, 0, 0, $warning, $warning);
 
 						if ($user_ban_id)
 						{
@@ -699,13 +699,13 @@ function add_warning($user_row, $warning, $warn_len, $warn_len_other, $warn_type
 
 	if ($send_pm)
 	{
-		include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
-		include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+		require($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
+		require($phpbb_root_path . 'includes/message_parser.' . $phpEx);
 
 		$user_row['user_lang'] = (file_exists($phpbb_root_path . 'language/' . $user_row['user_lang'] . "/mcp.$phpEx")) ? $user_row['user_lang'] : $config['default_lang'];
 		include($phpbb_root_path . 'language/' . basename($user_row['user_lang']) . "/mcp.$phpEx");
 
-		$message_parser = new parse_message();
+		$message_parser = new \parse_message;
 
 		$message_parser->message = sprintf($lang['WARNING_PM_BODY'], $warning);
 		$message_parser->parse(true, true, true, false, false, true, true);
@@ -956,7 +956,7 @@ function user_notify($email_template = '', $user_row, $assign_vars_array, $templ
 
 	include_once($phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
 
-	$messenger = new messenger($use_queue);
+	$messenger = new \messenger($use_queue);
 	$messenger->template($email_template, $user_row['user_lang'], $template_path);
 	$messenger->set_addresses($user_row);
 	$messenger->anti_abuse_headers($config, $user);
