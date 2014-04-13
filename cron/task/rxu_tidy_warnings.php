@@ -114,22 +114,22 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$operator = ($table_status['Engine'] === 'MyISAM') ? '<' : '<=';
 			}
 
-			$sql = 'SELECT u.user_id, b.ban_userid FROM ' . USERS_TABLE . ' u, ' . BANLIST_TABLE . " b
-				WHERE u.user_ban_id = 1 
+			$sql = 'SELECT u.user_id, b.ban_id FROM ' . USERS_TABLE . ' u, ' . BANLIST_TABLE . " b
+				WHERE u.user_ban_id = 1
 					AND u.user_warnings $operator " . $this->config['warnings_for_ban'] . '
 					AND u.user_id = b.ban_userid';
 			$result = $this->db->sql_query($sql);
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$unban_list[] = (int) $row['ban_userid'];
+				$unban_list[(int) $row['user_id']] = (int) $row['ban_id'];
 			}
 			$this->db->sql_freeresult($result);
 
 			if (sizeof($unban_list))
 			{
 				$sql = 'UPDATE ' . USERS_TABLE . ' SET user_ban_id = 0
-					WHERE ' . $this->db->sql_in_set('user_id', $unban_list);
+					WHERE ' . $this->db->sql_in_set('user_id', array_keys($unban_list));
 				$this->db->sql_query($sql);
 /*
 				// Delete stale bans (partially borrowed from user_unban())
@@ -167,7 +167,6 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 					add_log('user', $user_id, 'LOG_UNBAN_USER', $l_unban_list);
 				}
 			}
-
 			$this->db->sql_transaction('commit');
 		}
 

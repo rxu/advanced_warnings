@@ -128,6 +128,7 @@ class listener implements EventSubscriberInterface
 		$user_cache_data = array_merge($user_cache_data, array(
 			'user_ban_id'	=> (isset($row['user_ban_id'])) ? $row['user_ban_id'] : 0,
 		));
+		$event['user_cache_data'] = $user_cache_data;
 	}
 
 	private function get_warnings_data()
@@ -164,7 +165,6 @@ class listener implements EventSubscriberInterface
 			}
 		}
 		$this->db->sql_freeresult($result);
- 
 	}
 
 	public function modify_postrow($event)
@@ -210,13 +210,15 @@ class listener implements EventSubscriberInterface
 		$mode = $event['mode'];
 		$display_vars = $event['display_vars'];
 
-		if ($mode = 'settings')
+		if ($mode == 'settings')
 		{
-			if (isset($display_vars['vars']['warnings_expire_days']))
-			{
-				unset($display_vars['vars']['warnings_expire_days']);
-			}
+			unset($display_vars['vars']['legend2']);
+			unset($display_vars['vars']['warnings_expire_days']);
+			unset($display_vars['vars']['legend3']);
+
+			$display_vars['vars']['legend_warnings'] = 'WARNINGS';
 			$display_vars['vars']['warnings_for_ban'] = array('lang' => 'WARNINGS_FOR_BAN', 'validate' => 'int', 'type' => 'text:1:2', 'explain' => true);
+			$display_vars['vars']['legend3'] = 'ACP_SUBMIT_CHANGES';
 			$event['display_vars'] = $display_vars;
 		}
 	}
