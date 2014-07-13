@@ -27,7 +27,7 @@ class listener implements EventSubscriberInterface
     /**
     * Instead of using "global $user;" in the function, we use dependencies again.
     */
-    public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver $db, \phpbb\auth\auth $auth, \phpbb\template\template $template, \phpbb\user $user, $phpbb_root_path, $php_ext)
+    public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\template\template $template, \phpbb\user $user, $phpbb_root_path, $php_ext)
     {
         $this->template = $template;
         $this->user = $user;
