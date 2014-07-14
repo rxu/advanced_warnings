@@ -4,7 +4,7 @@
 * advanced_warnings [Ukrainian]
 *
 * @package advanced_warnings
-* @copyright (c) 2014 Oleksiy Fryschyn (Sherlock)
+* @copyright (c) 2014 Oleksii Fryschyn (Sherlock)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
