@@ -1,4 +1,4 @@
-Subject: {SITENAME} - вам вынесено предупреждение
+Subject: {SITENAME} - вам винесено попередження
 
 Вітаю {USERNAME},
 
