@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* warnings [Ukrainian]
+* advanced_warnings [Ukrainian]
 *
 * @package language
 * @copyright (c) 2014 Oleksiy Fryschyn
