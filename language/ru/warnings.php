@@ -41,7 +41,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'BAN'					=> 'Бан',
-	'BANNED_UNTIL'			=> 'до: %s',
+	'BANNED_UNTIL'			=> 'до %s',
 	'BANNED'				=> 'Забанен',
 	'BANNED_PERMANENTLY'	=> 'Бессрочно',
 	'BANNED_BY_X_WARNINGS'	=> array(
@@ -70,7 +70,7 @@ $lang = array_merge($lang, array(
 	'WARNING_POST'			=> 'Перейти к сообщению',
 	'WARNING_TIME'			=> 'Выдано',
 
-	'LENGTH_WARNING_INVALID'		=> 'Дата должна быть задана в виде <kbd>ГГГ-ММ-ДД</kbd>.',
+	'LENGTH_WARNING_INVALID'		=> 'Дата должна быть задана в формате <kbd>ГГГГ-ММ-ДД</kbd>.',
 	'USER_WARNING_EDITED'			=> 'Предупреждение успешно отредактировано.',
 	'WARNINGS_FOR_BAN'				=> 'Предупреждений для бана',
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Максимальное число неснятых предупреждений, при достижении которого пользователь будет забанен автоматически.',
