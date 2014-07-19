@@ -102,35 +102,35 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 		);
 	}
 
-        public function update_module_auth()
-        {
-            $sql = "UPDATE " . MODULES_TABLE . "
+		public function update_module_auth()
+		{
+			$sql = "UPDATE " . MODULES_TABLE . "
 				SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn'
 				WHERE module_basename = 'mcp_warn'
-                  AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
-            $this->sql_query($sql);
+					AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
+			$this->sql_query($sql);
 
-            $sql = "UPDATE " . MODULES_TABLE . "
+			$sql = "UPDATE " . MODULES_TABLE . "
 				SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn && acl_f_read,\$id'
 				WHERE module_basename = 'mcp_warn'
-                  AND module_langname = 'MCP_WARN_POST'";
-            $this->sql_query($sql);
-        }
+					AND module_langname = 'MCP_WARN_POST'";
+			$this->sql_query($sql);
+		}
 
-        public function revert_module_auth()
-        {
-            $sql = "UPDATE " . MODULES_TABLE . "
+		public function revert_module_auth()
+		{
+			$sql = "UPDATE " . MODULES_TABLE . "
 				SET module_auth = 'aclf_m_warn'
 				WHERE module_basename = 'mcp_warn'
-                  AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
-            $this->sql_query($sql);
-        
-            $sql = "UPDATE " . MODULES_TABLE . "
+					AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
+			$this->sql_query($sql);
+
+			$sql = "UPDATE " . MODULES_TABLE . "
 				SET module_auth = 'aclf_m_warn && acl_f_read,\$id'
 				WHERE module_basename = 'mcp_warn'
-                  AND module_langname = 'MCP_WARN_POST'";
-            $this->sql_query($sql);
-        }
+					AND module_langname = 'MCP_WARN_POST'";
+			$this->sql_query($sql);
+		}
 
 	public function purge_cache()
 	{
