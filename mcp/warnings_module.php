@@ -406,12 +406,12 @@ class warnings_module
 		$message = generate_text_for_display($user_row['post_text'], $user_row['bbcode_uid'], $user_row['bbcode_bitfield'], $parse_flags, true);
 
 		// Generate the appropriate user information for the user we are looking at
-        if (!function_exists('phpbb_get_user_avatar'))
+                if (!function_exists('phpbb_get_user_avatar'))
 		{
 			include($phpbb_root_path . 'includes/functions.' . $phpEx);
 		}
 
-        if (!function_exists('get_user_rank'))
+                if (!function_exists('get_user_rank'))
 		{
 			include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 		}
@@ -639,7 +639,7 @@ class warnings_module
 			include($phpbb_root_path . 'includes/functions.' . $phpEx);
 		}
 
-        if (!function_exists('get_user_rank'))
+                if (!function_exists('get_user_rank'))
 		{
 			include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 		}
