@@ -18,7 +18,7 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-			return array('\phpbb\db\migration\data\v310\dev');
+		return array('\phpbb\db\migration\data\v310\dev');
 	}
 
 	public function update_schema()
@@ -46,34 +46,9 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 	public function revert_data()
 	{
 		return array(
-			array('module.add', array('mcp', 'MCP_WARN', array(
-					'module_basename'	=> 'mcp_warn',
-					'module_langname'	=> 'MCP_WARN_FRONT',
-					'module_mode'		=> 'front',
-					'module_auth'		=> 'aclf_m_warn',
-			))),
-
-			array('module.add', array('mcp', 'MCP_WARN', array(
-					'module_basename'	=> 'mcp_warn',
-					'module_langname'	=> 'MCP_WARN_LIST',
-					'module_mode'		=> 'list',
-					'module_auth'		=> 'aclf_m_warn',
-			))),
-
-			array('module.add', array('mcp',	'MCP_WARN', array(
-					'module_basename'	=> 'mcp_warn',
-					'module_langname'	=> 'MCP_WARN_USER',
-					'module_mode'		=> 'warn_user',
-					'module_auth'		=> 'aclf_m_warn',
-			))),
-
-			array('module.add', array('mcp',	'MCP_WARN', array(
-					'module_basename'	=> 'mcp_warn',
-					'module_langname'	=> 'MCP_WARN_POST',
-					'module_mode'		=> 'warn_post',
-					'module_auth'		=> 'acl_m_warn && acl_f_read,$id',
-			))),
-
+			
+			array('custom', array(array($this, 'revert_module_auth'))),
+			
 			// Revert warnings_gs value to default
 			array('config.update', array('warnings_gc', '14400')),
 			array('config.update', array('warnings_expire_days', '90')),
@@ -87,58 +62,32 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 		return array(
 
 			// Remove modules to replace them with the new ones
-			array('module.remove', array('mcp',	'MCP_WARN', array(
-					'module_basename'	=> 'mcp_warn',
-					'module_langname'	=> 'MCP_WARN_FRONT',
-					'module_mode'		=> 'front',
-					'module_auth'		=> 'aclf_m_warn',
-			))),
-
-			array('module.remove', array('mcp',	'MCP_WARN', array(
-					'module_basename'	=> 'mcp_warn',
-					'module_langname'	=> 'MCP_WARN_LIST',
-					'module_mode'		=> 'list',
-					'module_auth'		=> 'aclf_m_warn',
-			))),
-
-			array('module.remove', array('mcp',	'MCP_WARN', array(
-					'module_basename'	=> 'mcp_warn',
-					'module_langname'	=> 'MCP_WARN_USER',
-					'module_mode'		=> 'warn_user',
-					'module_auth'		=> 'aclf_m_warn',
-			))),
-
-			array('module.remove', array('mcp',	'MCP_WARN', array(
-					'module_basename'	=> 'mcp_warn',
-					'module_langname'	=> 'MCP_WARN_POST',
-					'module_mode'		=> 'warn_post',
-					'module_auth'		=> 'acl_m_warn && acl_f_read,$id',
-			))),
+                        array('custom', array(array($this, 'update_module_auth'))),
 
 			// Add replacement modules
 			array('module.add', array('mcp', 'MCP_WARN', array(
-					'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
-					'module_langname'	=> 'RXU_WARN_FRONT',
-					'module_mode'		=> 'front',
-					'module_auth'		=> 'aclf_m_warn',
+				'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
+				'module_langname'	=> 'RXU_WARN_FRONT',
+				'module_mode'		=> 'front',
+				'module_auth'		=> 'ext_rxu/advanced_warnings && aclf_m_warn',
 			))),
 			array('module.add', array('mcp', 'MCP_WARN', array(
-					'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
-					'module_langname'	=> 'RXU_WARN_LIST',
-					'module_mode'		=> 'list',
-					'module_auth'		=> 'aclf_m_warn',
+				'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
+				'module_langname'	=> 'RXU_WARN_LIST',
+				'module_mode'		=> 'list',
+				'module_auth'		=> 'ext_rxu/advanced_warnings && aclf_m_warn',
 			))),
 			array('module.add', array('mcp', 'MCP_WARN', array(
-					'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
-					'module_langname'	=> 'RXU_WARN_USER',
-					'module_mode'		=> 'warn_user',
-					'module_auth'		=> 'aclf_m_warn',
+				'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
+				'module_langname'	=> 'RXU_WARN_USER',
+				'module_mode'		=> 'warn_user',
+				'module_auth'		=> 'ext_rxu/advanced_warnings && aclf_m_warn',
 			))),
 			array('module.add', array('mcp', 'MCP_WARN', array(
-					'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
-					'module_langname'	=> 'RXU_WARN_POST',
-					'module_mode'		=> 'warn_post',
-					'module_auth'		=> 'acl_m_warn && acl_f_read,$id',
+				'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
+				'module_langname'	=> 'RXU_WARN_POST',
+				'module_mode'		=> 'warn_post',
+				'module_auth'		=> 'ext_rxu/advanced_warnings && acl_m_warn && acl_f_read,$id',
 			))),
 
 			// Add config
@@ -152,6 +101,36 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 			array('custom', array(array($this, 'purge_cache'))),
 		);
 	}
+
+        public function update_module_auth()
+        {
+            $sql = "UPDATE " . MODULES_TABLE . "
+				SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn'
+				WHERE module_basename = 'mcp_warn'
+                  AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
+            $this->sql_query($sql);
+
+            $sql = "UPDATE " . MODULES_TABLE . "
+				SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn && acl_f_read,\$id'
+				WHERE module_basename = 'mcp_warn'
+                  AND module_langname = 'MCP_WARN_POST'";
+            $this->sql_query($sql);
+        }
+
+        public function revert_module_auth()
+        {
+            $sql = "UPDATE " . MODULES_TABLE . "
+				SET module_auth = 'aclf_m_warn'
+				WHERE module_basename = 'mcp_warn'
+                  AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
+            $this->sql_query($sql);
+        
+            $sql = "UPDATE " . MODULES_TABLE . "
+				SET module_auth = 'aclf_m_warn && acl_f_read,\$id'
+				WHERE module_basename = 'mcp_warn'
+                  AND module_langname = 'MCP_WARN_POST'";
+            $this->sql_query($sql);
+        }
 
 	public function purge_cache()
 	{
