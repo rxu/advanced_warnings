@@ -110,7 +110,7 @@ class listener implements EventSubscriberInterface
 				'WARNING_TIME'		=> ($row['warning_end']) ? $this->user->format_date($row['warning_end']) : $this->user->lang['PERMANENT'],
 				'WARNING'			=> $warning[0],
 				'WARNINGS'			=> $this->user->format_date($row['warning_time']),
-				'WARNING_STATUS'	=> ($row['warning_status']) ? true : false,
+				'WARNING_STATUS'	=> ($row['warning_status'] && $this->auth->acl_get('m_warn')) ? true : false,
 				'WARNING_TYPE'		=> ($row['warning_type'] == self::BAN) ? $this->user->lang['BAN'] : $this->user->lang['WARNING'],
 				'U_WARNING_POST_URL'=> ($row['post_id']) ? append_sid("{$this->phpbb_root_path}viewtopic.$this->php_ext", 'p=' . $row['post_id'] . '#p' . $row['post_id']) : '',
 			);
