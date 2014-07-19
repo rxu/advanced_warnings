@@ -62,7 +62,7 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 		return array(
 
 			// Remove modules to replace them with the new ones
-            array('custom', array(array($this, 'update_module_auth'))),
+                        array('custom', array(array($this, 'update_module_auth'))),
 
 			// Add replacement modules
 			array('module.add', array('mcp', 'MCP_WARN', array(
@@ -97,41 +97,40 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 
 			// Current version
 			array('config.add', array('advanced_warnings_version', '2.0.0')),
-            array('config.add', array('advanced_warnings_disabled', false)),
 
 			array('custom', array(array($this, 'purge_cache'))),
 		);
 	}
 
-    public function update_module_auth()
-    {
-        $sql = "UPDATE " . MODULES_TABLE . "
-        SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn'
-        WHERE module_basename = 'mcp_warn'
-            AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
-        $this->sql_query($sql);
-        
-        $sql = "UPDATE " . MODULES_TABLE . "
-        SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn && acl_f_read,\$id'
-        WHERE module_basename = 'mcp_warn'
-            AND module_langname = 'MCP_WARN_POST'";
-        $this->sql_query($sql);
-    }
+        public function update_module_auth()
+        {
+            $sql = "UPDATE " . MODULES_TABLE . "
+            SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn'
+            WHERE module_basename = 'mcp_warn'
+                  AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
+            $this->sql_query($sql);
 
-    public function revert_module_auth()
-    {
-        $sql = "UPDATE " . MODULES_TABLE . "
-        SET module_auth = 'aclf_m_warn'
-        WHERE module_basename = 'mcp_warn'
-            AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
-        $this->sql_query($sql);
+            $sql = "UPDATE " . MODULES_TABLE . "
+            SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn && acl_f_read,\$id'
+            WHERE module_basename = 'mcp_warn'
+                  AND module_langname = 'MCP_WARN_POST'";
+            $this->sql_query($sql);
+        }
+
+        public function revert_module_auth()
+        {
+            $sql = "UPDATE " . MODULES_TABLE . "
+            SET module_auth = 'aclf_m_warn'
+            WHERE module_basename = 'mcp_warn'
+                  AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
+            $this->sql_query($sql);
         
-        $sql = "UPDATE " . MODULES_TABLE . "
-        SET module_auth = 'aclf_m_warn && acl_f_read,\$id'
-        WHERE module_basename = 'mcp_warn'
-            AND module_langname = 'MCP_WARN_POST'";
-        $this->sql_query($sql);
-    }
+            $sql = "UPDATE " . MODULES_TABLE . "
+            SET module_auth = 'aclf_m_warn && acl_f_read,\$id'
+            WHERE module_basename = 'mcp_warn'
+                  AND module_langname = 'MCP_WARN_POST'";
+            $this->sql_query($sql);
+        }
 
 	public function purge_cache()
 	{
