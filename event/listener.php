@@ -46,6 +46,7 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.modify_mcp_modules_display_option'	=> 'set_display_option',
 			'core.memberlist_view_profile'				=> 'add_memberlist_info',
+			'core.memberlist_prepare_profile_data'		=> 'add_warn_link',
 			'core.viewtopic_cache_user_data'			=> 'modify_viewtopic_usercache_data',
 			'core.viewtopic_modify_post_row'			=> 'modify_postrow',
 			'core.delete_posts_in_transaction'			=> 'handle_delete_posts',
@@ -80,7 +81,6 @@ class listener implements EventSubscriberInterface
 		$user = array();
 
 		// Warnings list
-		$this->user->add_lang('acp/ban');
 		$this->user->add_lang_ext('rxu/advanced_warnings', 'warnings');
 		$sql = 'SELECT w.warning_id, w.post_id, w.warning_time, w.warning_end, w.warning_type, w.warning_status, l.user_id, l.log_data, l.reportee_id, u.username, u.user_colour 
 			FROM ' . WARNINGS_TABLE . ' w, ' . LOG_TABLE . ' l, ' . USERS_TABLE . " u  
@@ -102,22 +102,33 @@ class listener implements EventSubscriberInterface
 			$warning = unserialize($row['log_data']);
 
 			$user[] = array(
-				'U_EDIT'			=> ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
+				'U_EDIT'            => ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
 
-				'USERNAME_FULL'		=> get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
-				'USERNAME_COLOUR'	=> ($row['user_colour']) ? '#' . $row['user_colour'] : '',
+				'USERNAME_FULL'	    => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
+				'USERNAME_COLOUR'   => ($row['user_colour']) ? '#' . $row['user_colour'] : '',
 			
-				'WARNING_TIME'		=> ($row['warning_end']) ? $this->user->format_date($row['warning_end']) : $this->user->lang['PERMANENT'],
-				'WARNING'			=> $warning[0],
-				'WARNINGS'			=> $this->user->format_date($row['warning_time']),
-				'WARNING_STATUS'	=> ($row['warning_status'] && $this->auth->acl_get('m_warn')) ? true : false,
-				'WARNING_TYPE'		=> ($row['warning_type'] == self::BAN) ? $this->user->lang['BAN'] : $this->user->lang['WARNING'],
+				'WARNING_TIME'      => ($row['warning_end']) ? $this->user->format_date($row['warning_end']) : $this->user->lang['PERMANENT'],
+				'WARNING'           => $warning[0],
+				'WARNINGS'          => $this->user->format_date($row['warning_time']),
+				'WARNING_STATUS'    => ($row['warning_status'] && $this->auth->acl_get('m_warn')) ? true : false,
+				'WARNING_TYPE'      => ($row['warning_type'] == self::BAN) ? $this->user->lang['BAN'] : $this->user->lang['WARNING'],
 				'U_WARNING_POST_URL'=> ($row['post_id']) ? append_sid("{$this->phpbb_root_path}viewtopic.$this->php_ext", 'p=' . $row['post_id'] . '#p' . $row['post_id']) : '',
 			);
 		}
 		$this->db->sql_freeresult($result);
 
 		$this->template->assign_block_vars_array('user', $user);
+
+		// Check warning permissions
+		$event['warn_user_enabled'] = $this->auth->acl_get('m_warn');
+	}
+    
+	public function add_warn_link($event)
+	{
+		$user_id = (int) $event['data']['user_id'];
+		$template_data = $event['template_data'];
+		$template_data['U_WARN'] = ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=warn_user&amp;u=' . $user_id) : '';
+		$event['template_data'] = $template_data;
 	}
 
 	public function modify_viewtopic_usercache_data($event)
@@ -234,7 +245,7 @@ class listener implements EventSubscriberInterface
 		$module_row = $event['module_row'];
 		if ($row['module_basename'] == '\rxu\advanced_warnings\mcp\warnings_module')
 		{
-			$url_func = '_module_warn_url';
+			$url_func = 'phpbb_module_warn_url';
 			$module_row['url_extra'] = (function_exists($url_func)) ? $url_func($row['module_mode'], $row) : '';
 			$event['module_row'] = $module_row;
 		}
