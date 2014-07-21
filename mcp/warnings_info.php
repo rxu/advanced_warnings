@@ -21,10 +21,10 @@ class mcp_warn_info
 			'title'		=> 'MCP_WARN',
 			'version'	=> '1.0.0',
 			'modes'		=> array(
-				'front'				=> array('title' => 'RXU_WARN_FRONT', 'auth' => 'aclf_m_warn', 'cat' => array('MCP_WARN')),
-				'list'				=> array('title' => 'RXU_WARN_LIST', 'auth' => 'aclf_m_warn', 'cat' => array('MCP_WARN')),
-				'warn_user'			=> array('title' => 'RXU_WARN_USER', 'auth' => 'aclf_m_warn', 'cat' => array('MCP_WARN')),
-				'warn_post'			=> array('title' => 'RXU_WARN_POST', 'auth' => 'acl_m_warn && acl_f_read,$id', 'cat' => array('MCP_WARN')),
+				'front'				=> array('title' => 'RXU_WARN_FRONT', 'auth' => 'ext_rxu/advanced_warnings && aclf_m_warn', 'cat' => array('MCP_WARN')),
+				'list'				=> array('title' => 'RXU_WARN_LIST', 'auth' => 'ext_rxu/advanced_warnings && aclf_m_warn', 'cat' => array('MCP_WARN')),
+				'warn_user'			=> array('title' => 'RXU_WARN_USER', 'auth' => 'ext_rxu/advanced_warnings && aclf_m_warn', 'cat' => array('MCP_WARN')),
+				'warn_post'			=> array('title' => 'RXU_WARN_POST', 'auth' => 'ext_rxu/advanced_warnings && acl_m_warn && acl_f_read,$id', 'cat' => array('MCP_WARN')),
 			),
 		);
 	}
