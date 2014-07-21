@@ -46,7 +46,7 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.modify_mcp_modules_display_option'	=> 'set_display_option',
 			'core.memberlist_view_profile'				=> 'add_memberlist_info',
-			'core.memberlist_prepare_profile_data'		=> 'add_give_warning_link',
+			'core.memberlist_prepare_profile_data'		=> 'add_warn_link',
 			'core.viewtopic_cache_user_data'			=> 'modify_viewtopic_usercache_data',
 			'core.viewtopic_modify_post_row'			=> 'modify_postrow',
 			'core.delete_posts_in_transaction'			=> 'handle_delete_posts',
@@ -78,8 +78,6 @@ class listener implements EventSubscriberInterface
 	public function add_memberlist_info($event)
 	{
 		$user_id = (int) $event['member']['user_id'];
-		// Switch on warnings module
-		$event['warn_user_enabled'] = ($this->auth->acl_get('m_warn')) ? true : false;
 		$user = array();
 
 		// Warnings list
@@ -120,9 +118,12 @@ class listener implements EventSubscriberInterface
 		$this->db->sql_freeresult($result);
 
 		$this->template->assign_block_vars_array('user', $user);
+
+		// Check warning permissions
+		$event['warn_user_enabled'] = $this->auth->acl_get('m_warn');
 	}
     
-	public function add_give_warning_link($event)
+	public function add_warn_link($event)
 	{
 		$user_id = (int) $event['data']['user_id'];
 		$template_data = $event['template_data'];
