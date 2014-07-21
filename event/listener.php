@@ -245,7 +245,7 @@ class listener implements EventSubscriberInterface
 		$module_row = $event['module_row'];
 		if ($row['module_basename'] == '\rxu\advanced_warnings\mcp\warnings_module')
 		{
-			$url_func = '_module_warn_url';
+			$url_func = 'phpbb_module_warn_url';
 			$module_row['url_extra'] = (function_exists($url_func)) ? $url_func($row['module_mode'], $row) : '';
 			$event['module_row'] = $module_row;
 		}
