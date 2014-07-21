@@ -46,7 +46,7 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.modify_mcp_modules_display_option'	=> 'set_display_option',
 			'core.memberlist_view_profile'				=> 'add_memberlist_info',
-			'core.memberlist_prepare_profile_data'      => 'add_give_warning_link',
+			'core.memberlist_prepare_profile_data'		=> 'add_give_warning_link',
 			'core.viewtopic_cache_user_data'			=> 'modify_viewtopic_usercache_data',
 			'core.viewtopic_modify_post_row'			=> 'modify_postrow',
 			'core.delete_posts_in_transaction'			=> 'handle_delete_posts',
