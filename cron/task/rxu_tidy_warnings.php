@@ -27,6 +27,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	protected $config;
 	protected $db;
 	protected $user;
+	protected $cache;
 	protected $phpbb_root_path;
 	protected $php_ext;
 
