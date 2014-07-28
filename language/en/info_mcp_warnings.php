@@ -36,6 +36,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 
+	'RXU_WARN_FRONT' => 'Front page',
 	'RXU_WARN_LIST'	=> 'Warnings list',
 	'RXU_WARN_USER'	=> 'Warn user',
 	'RXU_WARN_POST'	=> 'Warn for post',
