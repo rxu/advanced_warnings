@@ -10,11 +10,6 @@
 
 namespace rxu\AdvancedWarnings\event;
 
-if (!defined('IN_PHPBB'))
-{
-    exit;
-}
-
 /**
 * Event listener
 */
@@ -24,13 +19,13 @@ class listener implements EventSubscriberInterface
 {
 	const BAN = 1;
 
-    /**
-    * Instead of using "global $user;" in the function, we use dependencies again.
-    */
-    public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\template\template $template, \phpbb\user $user, $phpbb_root_path, $php_ext)
-    {
-        $this->template = $template;
-        $this->user = $user;
+	/**
+	* Instead of using "global $user;" in the function, we use dependencies again.
+	*/
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\template\template $template, \phpbb\user $user, $phpbb_root_path, $php_ext)
+	{
+		$this->template = $template;
+		$this->user = $user;
 		$this->auth = $auth;
 		$this->db = $db;
 		$this->config = $config;
@@ -39,7 +34,7 @@ class listener implements EventSubscriberInterface
 		
 		$this->warnings = $this->users_banned = array();
 		$this->get_warnings_data();
-    }
+	}
 
 	static public function getSubscribedEvents()
 	{
@@ -106,7 +101,7 @@ class listener implements EventSubscriberInterface
 
 				'USERNAME_FULL'	    => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
 				'USERNAME_COLOUR'   => ($row['user_colour']) ? '#' . $row['user_colour'] : '',
-			
+
 				'WARNING_TIME'      => ($row['warning_end']) ? $this->user->format_date($row['warning_end']) : $this->user->lang['PERMANENT'],
 				'WARNING'           => $warning[0],
 				'WARNINGS'          => $this->user->format_date($row['warning_time']),
@@ -122,7 +117,7 @@ class listener implements EventSubscriberInterface
 		// Check warning permissions
 		$event['warn_user_enabled'] = $this->auth->acl_get('m_warn');
 	}
-    
+
 	public function add_warn_link($event)
 	{
 		$user_id = (int) $event['data']['user_id'];

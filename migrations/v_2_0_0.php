@@ -46,9 +46,8 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 	public function revert_data()
 	{
 		return array(
-			
 			array('custom', array(array($this, 'revert_module_auth'))),
-			
+
 			// Revert warnings_gs value to default
 			array('config.update', array('warnings_gc', '14400')),
 			array('config.update', array('warnings_expire_days', '90')),
@@ -62,7 +61,7 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 		return array(
 
 			// Remove modules to replace them with the new ones
-                        array('custom', array(array($this, 'update_module_auth'))),
+			array('custom', array(array($this, 'update_module_auth'))),
 
 			// Add replacement modules
 			array('module.add', array('mcp', 'MCP_WARN', array(
