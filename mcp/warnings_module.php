@@ -1,13 +1,13 @@
 <?php
 /**
 *
-* @package advanced_warnings
+* @package AdvancedWarnings
 * @copyright (c) 2014 rxu
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
-namespace rxu\advanced_warnings\mcp;
+namespace rxu\AdvancedWarnings\mcp;
 
 /**
 * @ignore
@@ -50,7 +50,7 @@ class warnings_module
 
 		add_form_key('mcp_warn');
 
-		$user->add_lang_ext('rxu/advanced_warnings', 'warnings');
+		$user->add_lang_ext('rxu/AdvancedWarnings', 'warnings');
 
 		switch ($mode)
 		{
@@ -86,7 +86,7 @@ class warnings_module
 
 		$template->assign_vars(array(
 			'U_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=mcp&amp;field=username&amp;select_single=true'),
-			'U_POST_ACTION'		=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=warn_user'),
+			'U_POST_ACTION'		=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=warn_user'),
 		));
 
 		// Obtain a list of the 5 naughtiest users....
@@ -182,11 +182,11 @@ class warnings_module
 				'WARNING_STATUS'	=> ($row['warning_status']) ? true : false,
 				'WARNING_TYPE'		=> ($row['warning_type'] == BAN) ? $user->lang['BAN'] : $user->lang['WARNING'],
 				'U_WARNING_POST_URL'=> ($row['post_id']) ? append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'p=' . $row['post_id'] . '#p' . $row['post_id']) : '',
-				'U_EDIT'			=> ($auth->acl_get('m_warn')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $row['user_id'] . '&amp;warn_id=' . $row['warning_id']) : '', 
+				'U_EDIT'			=> ($auth->acl_get('m_warn')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $row['user_id'] . '&amp;warn_id=' . $row['warning_id']) : '', 
 			));
 		}
 
-		$base_url = append_sid("{$phpbb_root_path}mcp.$phpEx", "i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=list&amp;st=$st&amp;sk=$sk&amp;sd=$sd");
+		$base_url = append_sid("{$phpbb_root_path}mcp.$phpEx", "i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=list&amp;st=$st&amp;sk=$sk&amp;sd=$sd");
 		if ($user_count)
 		{
 			$pagination->generate_template_pagination($base_url, 'pagination', 'start', $user_count, $config['topics_per_page'], $start);
@@ -386,7 +386,7 @@ class warnings_module
 						'WARNING_LENGTH_OLD'=> ($warning_id) ? (($warning_row['warning_end']) ? htmlspecialchars_decode($user->format_date($warning_row['warning_end'], $user_row['user_dateformat'])) : htmlspecialchars_decode($user->lang['PERMANENT'])) : '',
 						'WARNING_OLD'		=> (isset($warning_edit[0])) ? $warning_edit[0] : '',
 					);
-					user_notify($email_template, $user_row, $assign_vars_array, "{$phpbb_root_path}ext/rxu/advanced_warnings/language/{$user_row['user_lang']}/email");
+					user_notify($email_template, $user_row, $assign_vars_array, "{$phpbb_root_path}ext/rxu/AdvancedWarnings/language/{$user_row['user_lang']}/email");
 				}
 			}
 			else
@@ -621,7 +621,7 @@ class warnings_module
 						'WARNING_LENGTH_OLD'=> ($warning_id) ? (($warning_row['warning_end']) ? htmlspecialchars_decode($user->format_date($warning_row['warning_end'], $user_row['user_dateformat'])) : htmlspecialchars_decode($user->lang['PERMANENT'])) : '',
 						'WARNING_OLD'		=> (isset($warning_edit[0])) ? $warning_edit[0] : '',
 					);
-					user_notify($email_template, $user_row, $assign_vars_array, "{$phpbb_root_path}ext/rxu/advanced_warnings/language/{$user_row['user_lang']}/email");
+					user_notify($email_template, $user_row, $assign_vars_array, "{$phpbb_root_path}ext/rxu/AdvancedWarnings/language/{$user_row['user_lang']}/email");
 				}
 			}
 			else

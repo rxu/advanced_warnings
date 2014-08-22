@@ -2,13 +2,13 @@
 
 /**
 *
-* @package advanced_warnings
+* @package AdvancedWarnings
 * @copyright (c) 2014 Ruslan Uzdenov (rxu)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
-namespace rxu\advanced_warnings\event;
+namespace rxu\AdvancedWarnings\event;
 
 if (!defined('IN_PHPBB'))
 {
@@ -65,12 +65,12 @@ class listener implements EventSubscriberInterface
 
 		if (!$user_id && $username == '')
 		{
-			$module->set_display('\rxu\advanced_warnings\mcp\warnings_module', 'warn_user', false);
+			$module->set_display('\rxu\AdvancedWarnings\mcp\warnings_module', 'warn_user', false);
 		}
 
 		if (!$post_id)
 		{
-			$module->set_display('\rxu\advanced_warnings\mcp\warnings_module', 'warn_post', false);
+			$module->set_display('\rxu\AdvancedWarnings\mcp\warnings_module', 'warn_post', false);
 		}
 		$event['module'] = $module;
 	}
@@ -81,7 +81,7 @@ class listener implements EventSubscriberInterface
 		$user = array();
 
 		// Warnings list
-		$this->user->add_lang_ext('rxu/advanced_warnings', 'warnings');
+		$this->user->add_lang_ext('rxu/AdvancedWarnings', 'warnings');
 		$sql = 'SELECT w.warning_id, w.post_id, w.warning_time, w.warning_end, w.warning_type, w.warning_status, l.user_id, l.log_data, l.reportee_id, u.username, u.user_colour 
 			FROM ' . WARNINGS_TABLE . ' w, ' . LOG_TABLE . ' l, ' . USERS_TABLE . " u  
 				WHERE w.user_id = $user_id 
@@ -102,7 +102,7 @@ class listener implements EventSubscriberInterface
 			$warning = unserialize($row['log_data']);
 
 			$user[] = array(
-				'U_EDIT'            => ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
+				'U_EDIT'            => ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
 
 				'USERNAME_FULL'	    => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
 				'USERNAME_COLOUR'   => ($row['user_colour']) ? '#' . $row['user_colour'] : '',
@@ -127,7 +127,7 @@ class listener implements EventSubscriberInterface
 	{
 		$user_id = (int) $event['data']['user_id'];
 		$template_data = $event['template_data'];
-		$template_data['U_WARN'] = ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=warn_user&amp;u=' . $user_id) : '';
+		$template_data['U_WARN'] = ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=warn_user&amp;u=' . $user_id) : '';
 		$event['template_data'] = $template_data;
 	}
 
@@ -181,7 +181,7 @@ class listener implements EventSubscriberInterface
 	public function modify_postrow($event)
 	{
 		$this->user->add_lang('acp/ban');
-		$this->user->add_lang_ext('rxu/advanced_warnings', 'warnings');
+		$this->user->add_lang_ext('rxu/AdvancedWarnings', 'warnings');
 
 		$row = $event['row'];
 		$postrow = $event['post_row'];
@@ -198,7 +198,7 @@ class listener implements EventSubscriberInterface
 			'POSTER_BANNED'		=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? true : ((isset($this->users_banned[$poster_id])) ? true : false),
 			'POSTER_BAN_END'	=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? $this->user->lang('BANNED_BY_X_WARNINGS', (int) $this->config['warnings_for_ban']) : ((isset($this->users_banned[$poster_id])) ? (($this->users_banned[$poster_id]['warning_end'] > 0) ? sprintf($this->user->lang['BANNED_UNTIL'], $this->user->format_date($this->users_banned[$poster_id]['warning_end'])) : $this->user->lang['BANNED_PERMANENTLY']) : ''),
 		));
-		$postrow['U_WARN'] = ($this->auth->acl_get('m_warn') && $poster_id != $this->user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\advanced_warnings\mcp\warnings_module&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $post_id, true, $this->user->session_id) : '';
+		$postrow['U_WARN'] = ($this->auth->acl_get('m_warn') && $poster_id != $this->user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $post_id, true, $this->user->session_id) : '';
 
 		$event['post_row'] = $postrow;
 	}
@@ -216,7 +216,7 @@ class listener implements EventSubscriberInterface
 
 	public function add_acp_config($event)
 	{
-		$this->user->add_lang_ext('rxu/advanced_warnings', 'warnings');
+		$this->user->add_lang_ext('rxu/AdvancedWarnings', 'warnings');
 
 		$mode = $event['mode'];
 		$display_vars = $event['display_vars'];
@@ -236,14 +236,14 @@ class listener implements EventSubscriberInterface
 
 	public function add_acp_lang($event)
 	{
-		$this->user->add_lang_ext('rxu/advanced_warnings', 'info_mcp_warnings');
+		$this->user->add_lang_ext('rxu/AdvancedWarnings', 'info_mcp_warnings');
 	}
 
 	public function modify_extra_url($event)
 	{
 		$row = $event['row'];
 		$module_row = $event['module_row'];
-		if ($row['module_basename'] == '\rxu\advanced_warnings\mcp\warnings_module')
+		if ($row['module_basename'] == '\rxu\AdvancedWarnings\mcp\warnings_module')
 		{
 			$url_func = 'phpbb_module_warn_url';
 			$module_row['url_extra'] = (function_exists($url_func)) ? $url_func($row['module_mode'], $row) : '';

@@ -1,5 +1,5 @@
 {
-    "name": "rxu/advanced_warnings",
+    "name": "rxu/AdvancedWarnings",
     "type": "phpbb-extension",
     "description": "This extension replace built-in warnings system with the more advanced one.",
     "homepage": "http://phpbbguru.net",
@@ -16,6 +16,9 @@
     "require": {
         "php": ">=5.3.3"
     },
+   "require-dev": {
+      "phpbb/epv": "dev-master"
+   },
     "extra": {
         "display-name": "Advanced warnings",
         "soft-require": {

@@ -1,13 +1,13 @@
 <?php
 /**
 *
-* @package advanced_warnings
+* @package AdvancedWarnings
 * @copyright (c) 2014 rxu
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
-namespace rxu\advanced_warnings\migrations;
+namespace rxu\AdvancedWarnings\migrations;
 
 class v_2_0_0 extends \phpbb\db\migration\migration
 {
@@ -66,28 +66,28 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 
 			// Add replacement modules
 			array('module.add', array('mcp', 'MCP_WARN', array(
-				'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
+				'module_basename'	=> '\rxu\AdvancedWarnings\mcp\warnings_module',
 				'module_langname'	=> 'RXU_WARN_FRONT',
 				'module_mode'		=> 'front',
-				'module_auth'		=> 'ext_rxu/advanced_warnings && aclf_m_warn',
+				'module_auth'		=> 'ext_rxu/AdvancedWarnings && aclf_m_warn',
 			))),
 			array('module.add', array('mcp', 'MCP_WARN', array(
-				'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
+				'module_basename'	=> '\rxu\AdvancedWarnings\mcp\warnings_module',
 				'module_langname'	=> 'RXU_WARN_LIST',
 				'module_mode'		=> 'list',
-				'module_auth'		=> 'ext_rxu/advanced_warnings && aclf_m_warn',
+				'module_auth'		=> 'ext_rxu/AdvancedWarnings && aclf_m_warn',
 			))),
 			array('module.add', array('mcp', 'MCP_WARN', array(
-				'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
+				'module_basename'	=> '\rxu\AdvancedWarnings\mcp\warnings_module',
 				'module_langname'	=> 'RXU_WARN_USER',
 				'module_mode'		=> 'warn_user',
-				'module_auth'		=> 'ext_rxu/advanced_warnings && aclf_m_warn',
+				'module_auth'		=> 'ext_rxu/AdvancedWarnings && aclf_m_warn',
 			))),
 			array('module.add', array('mcp', 'MCP_WARN', array(
-				'module_basename'	=> '\rxu\advanced_warnings\mcp\warnings_module',
+				'module_basename'	=> '\rxu\AdvancedWarnings\mcp\warnings_module',
 				'module_langname'	=> 'RXU_WARN_POST',
 				'module_mode'		=> 'warn_post',
-				'module_auth'		=> 'ext_rxu/advanced_warnings && acl_m_warn && acl_f_read,$id',
+				'module_auth'		=> 'ext_rxu/AdvancedWarnings && acl_m_warn && acl_f_read,$id',
 			))),
 
 			// Add config
@@ -105,13 +105,13 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 		public function update_module_auth()
 		{
 			$sql = "UPDATE " . MODULES_TABLE . "
-				SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn'
+				SET module_auth = '!ext_rxu/AdvancedWarnings && aclf_m_warn'
 				WHERE module_basename = 'mcp_warn'
 					AND (module_langname = 'MCP_WARN_FRONT' OR module_langname = 'MCP_WARN_LIST' OR module_langname = 'MCP_WARN_USER')";
 			$this->sql_query($sql);
 
 			$sql = "UPDATE " . MODULES_TABLE . "
-				SET module_auth = '!ext_rxu/advanced_warnings && aclf_m_warn && acl_f_read,\$id'
+				SET module_auth = '!ext_rxu/AdvancedWarnings && aclf_m_warn && acl_f_read,\$id'
 				WHERE module_basename = 'mcp_warn'
 					AND module_langname = 'MCP_WARN_POST'";
 			$this->sql_query($sql);

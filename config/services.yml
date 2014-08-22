@@ -1,6 +1,6 @@
 services:
-    rxu.advanced_warnings.listener:
-        class: rxu\advanced_warnings\event\listener
+    rxu.AdvancedWarnings.listener:
+        class: rxu\AdvancedWarnings\event\listener
         arguments:
             - @config
             - @dbal.conn
@@ -12,8 +12,8 @@ services:
         tags:
             - { name: event.listener }
 
-    rxu.advanced_warnings.cron.task.rxu_tidy_warnings:
-        class: rxu\advanced_warnings\cron\task\rxu_tidy_warnings
+    rxu.AdvancedWarnings.cron.task.rxu_tidy_warnings:
+        class: rxu\AdvancedWarnings\cron\task\rxu_tidy_warnings
         arguments:
             - @config
             - @dbal.conn

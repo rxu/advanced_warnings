@@ -1,13 +1,13 @@
 <?php
 /**
 *
-* @package advanced_warnings
+* @package AdvancedWarnings
 * @copyright (c) 2014 Ruslan Uzdenov (rxu)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
-namespace rxu\advanced_warnings\cron\task;
+namespace rxu\AdvancedWarnings\cron\task;
 
 /**
 * @ignore
@@ -20,7 +20,7 @@ if (!defined('IN_PHPBB'))
 /**
 * Tidy topics cron task.
 *
-* @package advanced_warnings
+* @package AdvancedWarnings
 */
 class rxu_tidy_warnings extends \phpbb\cron\task\base
 {
