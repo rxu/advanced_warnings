@@ -31,7 +31,7 @@ class listener implements EventSubscriberInterface
 		$this->config = $config;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
-		
+
 		$this->warnings = $this->users_banned = array();
 		$this->get_warnings_data();
 	}
