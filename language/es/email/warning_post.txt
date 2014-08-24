@@ -1,0 +1,19 @@
+Subject: {SITENAME} - Ha sido advertido
+
+Hola {USERNAME},
+
+Una advertencia ha sido emitida para usted en "{SITENAME}" por {WARNING_POSTER}.
+La advertencia ha sido emitida por el siguiente mensaje:
+
+{U_POST}
+
+----------------------------
+Razón: {WARNING}
+Duración de la advertencia: {WARNING_LENGTH}
+----------------------------
+
+Si el número total de advertencias activos alcanzará {WARNINGS_COUNT} su cuenta será excluida de forma automática.
+
+Si usted tiene alguna pregunta sobre esta advertencia, por favor póngase en contacto con {WARNING_POSTER}.
+
+{EMAIL_SIG}

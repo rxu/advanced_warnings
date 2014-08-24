@@ -1,0 +1,14 @@
+Subject: {SITENAME} - Su cuenta ha sido exluida
+
+Hola {USERNAME},
+
+Su cuenta en "{SITENAME}" ha sido excluida por {WARNING_POSTER}.
+
+----------------------------
+Razón: {WARNING}
+Duración de la exclusión: {WARNING_LENGTH}
+----------------------------
+
+Si usted tiene alguna pregunta sobre esta exclusión, por favor póngase en contacto con {WARNING_POSTER}.
+
+{EMAIL_SIG}

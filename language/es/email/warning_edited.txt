@@ -1,0 +1,23 @@
+Subject: {SITENAME} - Advertencia editada
+
+Hola {USERNAME},
+
+Una advertencia que fue emitida con anterioridad en "{SITENAME}" ha sido editada por {WARNING_POSTER}.
+
+Antiguo estado de la advertencia:
+--------------------------------
+Tipo: {WARNING_TYPE_OLD}
+Razón: {WARNING_OLD}
+Duración de la advertencia: {WARNING_LENGTH_OLD}
+--------------------------------
+
+Nuevo estado de la advertencia:
+--------------------------------
+Tipo: {WARNING_TYPE}
+Razón: {WARNING}
+Duración de la advertencia: {WARNING_LENGTH}
+--------------------------------
+
+Si usted tiene alguna pregunta sobre esto, por favor póngase en contacto con {WARNING_POSTER}.
+
+{EMAIL_SIG}
