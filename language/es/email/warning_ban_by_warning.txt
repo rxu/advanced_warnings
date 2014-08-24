@@ -1,0 +1,17 @@
+Subject: {SITENAME} - Su cuenta ha sido excluida
+
+Hola {USERNAME},
+
+Su cuenta en "{SITENAME}" ha sido excluida por {WARNING_POSTER}.
+La exclusión ha sido emitida por tener {WARNINGS_COUNT} advertencias.
+
+----------------------------
+Razón: {WARNING}
+Duración de la advertencia: {WARNING_LENGTH}
+----------------------------
+
+Su cuenta puede volver a ser activa después de que algunas de sus advertencias expire, y que el total de número de advertencias activas sea menor que {WARNINGS_COUNT}.
+
+Si usted tiene alguna pregunta sobre esta exclusión, por favor póngase en contacto con {WARNING_POSTER}.
+
+{EMAIL_SIG}
