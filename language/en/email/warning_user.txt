@@ -1,4 +1,4 @@
-Subject: {SITENAME} - your have been warned
+Subject: {SITENAME} - you have been warned
 
 Hello {USERNAME},
 
