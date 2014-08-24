@@ -72,5 +72,5 @@ $lang = array_merge($lang, array(
 	'WARNINGS_FOR_BAN'				=> 'Warnings for ban',
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Maximum warnings for user to be banned automatically for a period of last warning length.',
 	'WARNINGS_GC'					=> 'Warnings pruning period',
-	'WARNINGS_GC_EXPLAIN'			=> 'Time (in seconds) to prune exrired warnings periodically.',
+	'WARNINGS_GC_EXPLAIN'			=> 'Time (in seconds) to prune expired warnings periodically.',
 ));
