@@ -102,15 +102,18 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 			// Try to get storage engine type to detect if transactions are supported
 			// to apply proper bans selection (MyISAM/InnoDB)
 			$operator = '<';
-			$table_status = $this->db->get_table_status(USERS_TABLE);
-			if (isset($table_status['Engine']))
+			if (strpos($this->db->get_sql_layer(), 'mysql') !== false)
 			{
-				$operator = ($table_status['Engine'] === 'MyISAM') ? '<' : '<=';
+				$table_status = $this->db->get_table_status(USERS_TABLE);
+				if (isset($table_status['Engine']))
+				{
+					$operator = ($table_status['Engine'] === 'MyISAM') ? '<' : '<=';
+				}
 			}
 
 			$sql = 'SELECT u.user_id, b.ban_id FROM ' . USERS_TABLE . ' u, ' . BANLIST_TABLE . " b
 				WHERE u.user_ban_id = 1
-					AND u.user_warnings $operator " . $this->config['warnings_for_ban'] . '
+					AND u.user_warnings $operator " . (int) $this->config['warnings_for_ban'] . '
 					AND u.user_id = b.ban_userid';
 			$result = $this->db->sql_query($sql);
 
