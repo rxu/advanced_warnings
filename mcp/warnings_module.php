@@ -29,7 +29,7 @@ class warnings_module
 	function main($id, $mode)
 	{
 		global $auth, $db, $user, $template, $request;
-		global $config, $phpbb_root_path, $phpEx, $phpbb_log;
+		global $config, $phpbb_root_path, $phpEx;
 
 		$action = $request->variable('action', array('' => ''));
 
@@ -687,7 +687,7 @@ class warnings_module
 	*/
 	function add_warning($user_row, $warning, $warn_len, $warn_len_other, $warn_type = WARNING, $send_pm = true, $post_id = 0)
 	{
-		global $phpEx, $phpbb_root_path, $config;
+		global $phpEx, $phpbb_root_path, $config, $phpbb_log;
 		global $template, $db, $user, $auth, $cache;
 
 		if (!in_array($warn_type, array(WARNING, BAN)))
@@ -728,8 +728,8 @@ class warnings_module
 			submit_pm('post', $lang['WARNING_PM_SUBJECT'], $pm_data, false);
 		}
 
-		$this->phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', array('username' => $user_row['username']));
-		$log_id = $this->phpbb_log->add('user', $user_row['user_id'], $user_row['user_ip'], 'LOG_USER_WARNING_BODY', $warning);
+		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), array('username' => $user_row['username']));
+		$log_id = $phpbb_log->add('user', $user->data['user_id'], $user_row['user_ip'], 'LOG_USER_WARNING_BODY', time(), array($warning, 'reportee_id' => $user_row['user_id']));
 
 		$sql_ary = array(
 			'user_id'		=> $user_row['user_id'],
@@ -759,7 +759,7 @@ class warnings_module
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		$this->phpbb_log->add('mod', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', array('forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], 'username' => $user_row['username']));
+		$phpbb_log->add('mod', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), array('forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], 'username' => $user_row['username']));
 	}
 
 	/**
