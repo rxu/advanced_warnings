@@ -1,11 +1,10 @@
 <?php
-/** 
+/**
 *
-* advanced_warnings [Spanish]
+* Advanced Warnings extension for the phpBB Forum Software package.
 *
-* @package advanced_warnings
-* @copyright (c) 2014 Ruslan Uzdenov (rxu)
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
 *
 */
 
@@ -36,9 +35,8 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 
-	'RXU_WARN_FRONT' => 'Página principal',
-	'RXU_WARN_LIST'	=> 'Lista de advertencias',
-	'RXU_WARN_USER'	=> 'Advertir a usuario',
-	'RXU_WARN_POST'	=> 'Advertir por mensaje',
-
+	'RXU_WARN_FRONT'	=> 'Página principal',
+	'RXU_WARN_LIST'		=> 'Lista de advertencias',
+	'RXU_WARN_USER'		=> 'Advertir a usuario',
+	'RXU_WARN_POST'		=> 'Advertir por mensaje',
 ));
