@@ -1,12 +1,10 @@
 <?php
 /**
 *
-* common [English]
+* Advanced Warnings extension for the phpBB Forum Software package.
 *
-* @package language
-* @version $Id: warnings.php,v 1.000 2008/04/17 22:58:42 acydburn Exp $
-* @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
 *
 */
 

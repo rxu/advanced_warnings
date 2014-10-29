@@ -20,8 +20,6 @@ services:
             - @user
             - @cache.driver
             - @log
-            - %core.root_path%
-            - %core.php_ext%
         calls:
             - [set_name, [cron.task.core.rxu_tidy_warnings]]
         tags:

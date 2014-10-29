@@ -1,17 +1,15 @@
 <?php
 /**
 *
-* @package AdvancedWarnings
-* @copyright (c) 2014 rxu
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+* Advanced Warnings extension for the phpBB Forum Software package.
+*
+* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
 *
 */
 
 namespace rxu\AdvancedWarnings\mcp;
 
-/**
-* @package module_install
-*/
 class mcp_warn_info
 {
 	function module()
@@ -27,13 +25,5 @@ class mcp_warn_info
 				'warn_post'			=> array('title' => 'RXU_WARN_POST', 'auth' => 'ext_rxu/AdvancedWarnings && acl_m_warn && acl_f_read,$id', 'cat' => array('MCP_WARN')),
 			),
 		);
-	}
-
-	function install()
-	{
-	}
-
-	function uninstall()
-	{
 	}
 }

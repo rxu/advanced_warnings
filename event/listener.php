@@ -1,10 +1,10 @@
 <?php
-
 /**
 *
-* @package AdvancedWarnings
-* @copyright (c) 2014 Ruslan Uzdenov (rxu)
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+* Advanced Warnings extension for the phpBB Forum Software package.
+*
+* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
 *
 */
 
@@ -19,8 +19,39 @@ class listener implements EventSubscriberInterface
 {
 	const BAN = 1;
 
+	/** @var \phpbb\config\config */
+	protected $config;
+
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
+	/** @var \phpbb\template\template */
+	protected $template;
+
+	/** @var \phpbb\user */
+	protected $user;
+
+	/** @var string phpbb_root_path */
+	protected $phpbb_root_path;
+
+	/** @var string phpEx */
+	protected $php_ext;
+
 	/**
-	* Instead of using "global $user;" in the function, we use dependencies again.
+	* Constructor
+	*
+	* @param \phpbb\config\config                 $config           Config object
+	* @param \phpbb\db\driver\driver_interface    $db               DBAL object
+	* @param \phpbb\auth\auth                     $auth             User object
+	* @param \phpbb\template\template             $template         User object
+	* @param \phpbb\user                          $user             User object
+	* @param string                               $phpbb_root_path  phpbb_root_path
+	* @param string                               $php_ext          phpEx
+	* @return \rxu\AdvancedWarnings\event\listener
+	* @access public
 	*/
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\template\template $template, \phpbb\user $user, $phpbb_root_path, $php_ext)
 	{

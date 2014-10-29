@@ -1,9 +1,10 @@
 <?php
 /**
 *
-* @package AdvancedWarnings
-* @copyright (c) 2014 Ruslan Uzdenov (rxu)
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+* Advanced Warnings extension for the phpBB Forum Software package.
+*
+* @copyright (c) 2013 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
 *
 */
 
@@ -16,29 +17,39 @@ namespace rxu\AdvancedWarnings\cron\task;
 */
 class rxu_tidy_warnings extends \phpbb\cron\task\base
 {
+	/** @var \phpbb\config\config */
 	protected $config;
+
+	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
+
+	/** @var \phpbb\user */
 	protected $user;
+
+	/** @var \phpbb\cache\driver\driver_interface */
 	protected $cache;
-	protected $phpbb_root_path;
-	protected $php_ext;
+
+	/** @var \phpbb\log\log */
+	protected $phpbb_log;
 
 	/**
-	* Constructor.
+	* Constructor
 	*
-	* @param phpbb_config $config The config
-	* @param phpbb_config $config The dbal.conn
-	* @param phpbb_user $user The user
+	* @param \phpbb\config\config                 $config       Config object
+	* @param \phpbb\db\driver\driver_interface    $db           DBAL object
+	* @param \phpbb\user                          $user         User object
+	* @param \phpbb\cache\driver\driver_interface $cache        Cache driver object
+	* @param \phpbb\log\log                       $phpbb_log    Log object
+	* @return \rxu\AdvancedWarnings\cron\task\rxu_tidy_warnings
+	* @access public
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\cache\driver\driver_interface $cache, \phpbb\log\log $phpbb_log, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\cache\driver\driver_interface $cache, \phpbb\log\log $phpbb_log)
 	{
 		$this->config = $config;
 		$this->db = $db;
 		$this->user = $user;
 		$this->cache = $cache;
 		$this->phpbb_log = $phpbb_log;
-		$this->phpbb_root_path = $phpbb_root_path;
-		$this->php_ext = $php_ext;
 	}
 
 	/**
@@ -65,6 +76,9 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 		return $this->config['warnings_last_gc'] < time() - $this->config['warnings_gc'];
 	}
 
+	/**
+	* The main cron task code.
+	*/
 	public function cron_tidy_warnings($topic_ids = array())
 	{
 		$warning_list = $user_list = $unban_list = array();
@@ -102,6 +116,8 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 			// Try to get storage engine type to detect if transactions are supported
 			// to apply proper bans selection (MyISAM/InnoDB)
 			$operator = '<';
+			/* Comment out this part of code for now as get_table_status()
+			* as unavailable for \phpbb\db\driver\driver_interface
 			if (strpos($this->db->get_sql_layer(), 'mysql') !== false)
 			{
 				$table_status = $this->db->get_table_status(USERS_TABLE);
@@ -110,6 +126,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 					$operator = ($table_status['Engine'] === 'MyISAM') ? '<' : '<=';
 				}
 			}
+			*/
 
 			$sql = 'SELECT u.user_id, b.ban_id FROM ' . USERS_TABLE . ' u, ' . BANLIST_TABLE . " b
 				WHERE u.user_ban_id = 1
@@ -128,13 +145,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$sql = 'UPDATE ' . USERS_TABLE . ' SET user_ban_id = 0
 					WHERE ' . $this->db->sql_in_set('user_id', array_keys($unban_list));
 				$this->db->sql_query($sql);
-/*
-				// Delete stale bans (partially borrowed from user_unban())
-				$sql = 'DELETE FROM ' . BANLIST_TABLE . '
-					WHERE ban_end < ' . time() . '
-						AND ban_end <> 0';
-				$this->db->sql_query($sql);
-*/
+
 				$sql = 'SELECT u.username AS unban_info, u.user_id
 					FROM ' . USERS_TABLE . ' u, ' . BANLIST_TABLE . ' b
 					WHERE ' . $this->db->sql_in_set('b.ban_id', $unban_list) . '
