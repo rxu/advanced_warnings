@@ -45,8 +45,8 @@ class listener implements EventSubscriberInterface
 	*
 	* @param \phpbb\config\config                 $config           Config object
 	* @param \phpbb\db\driver\driver_interface    $db               DBAL object
-	* @param \phpbb\auth\auth                     $auth             User object
-	* @param \phpbb\template\template             $template         User object
+	* @param \phpbb\auth\auth                     $auth             Auth object
+	* @param \phpbb\template\template             $template         Template object
 	* @param \phpbb\user                          $user             User object
 	* @param string                               $phpbb_root_path  phpbb_root_path
 	* @param string                               $php_ext          phpEx
