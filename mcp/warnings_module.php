@@ -192,7 +192,7 @@ class warnings_module
 			'S_SELECT_SORT_KEY'		=> $s_sort_key,
 			'S_SELECT_SORT_DAYS'	=> $s_limit_days,
 
-			'PAGE_NUMBER'		=> ($user_count) ? $pagination->on_page($base_url, $user_count, $config['topics_per_page'], $start) : '',
+			'PAGE_NUMBER'		=> ($user_count) ? $pagination->on_page($user_count, $config['topics_per_page'], $start) : '',
 			'TOTAL_WARNINGS'	=> $user->lang('LIST_WARNINGS', (int) $user_count),
 		));
 	}

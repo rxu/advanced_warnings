@@ -54,6 +54,7 @@ $lang = array_merge($lang, array(
 		2 => '%d предупреждения',
 		3 => '%d предупреждений',
 	),
+	'PERMANENT'	=> 'Бессрочно',
 	'WARNING'				=> 'Предупреждение',
 	'WARNING_TYPE'			=> 'Вид',
 	'WARNINGS'				=> 'Предупреждения',
