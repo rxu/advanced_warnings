@@ -2,7 +2,7 @@ Subject: {SITENAME} - avertissement modifié
 
 Bonjour {USERNAME},
 
-Votre compte a reçu précédemment un avertissement sur « {SITENAME} » et a été modifié par {WARNING_POSTER}.
+Votre compte a reçu précédemment un avertissement sur « {SITENAME} » puis a été modifié par {WARNING_POSTER}.
 
 Ancien statut de l’avertissement :
 ----------------------------
