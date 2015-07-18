@@ -1,0 +1,18 @@
+Subject: {SITENAME} - votre compte a été banni
+
+Bonjour {USERNAME},
+
+Votre compte sur « {SITENAME} » a été banni par {WARNING_POSTER}.
+
+Le bannissement a été émis pour le message suivant :
+
+{U_POST}
+
+----------------------------
+Raison : {WARNING}
+Durée du bannissement : {WARNING_LENGTH}
+----------------------------
+
+Si vous avez des questions à propos de ce bannissement, veuillez contacter {WARNING_POSTER}.
+
+{EMAIL_SIG}
