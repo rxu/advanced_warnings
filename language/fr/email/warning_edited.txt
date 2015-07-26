@@ -1,0 +1,23 @@
+Subject: {SITENAME} - avertissement modifié
+
+Bonjour {USERNAME},
+
+Votre compte a reçu précédemment un avertissement sur « {SITENAME} » puis a été modifié par {WARNING_POSTER}.
+
+Ancien statut de l’avertissement :
+----------------------------
+Type : {WARNING_TYPE_OLD}
+Raison : {WARNING_OLD}
+Durée de l’avertissement : {WARNING_LENGTH_OLD}
+----------------------------
+
+Nouveau statut de l’avertissement :
+----------------------------
+Type : {WARNING_TYPE}
+Raison : {WARNING}
+Durée de l’avertissement : {WARNING_LENGTH}
+----------------------------
+
+Si vous avez des questions à propos de cet avertissement, veuillez contacter {WARNING_POSTER}.
+
+{EMAIL_SIG}

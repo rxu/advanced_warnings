@@ -1,0 +1,20 @@
+Subject: {SITENAME} - vous avez été avertis
+
+Bonjour {USERNAME},
+
+Votre compte a reçu un avertissement sur « {SITENAME} » par {WARNING_POSTER}.
+
+L’avertissement a été émis pour le message suivant :
+
+{U_POST}
+
+----------------------------
+Raison : {WARNING}
+Durée de l’avertissement : {WARNING_LENGTH}
+----------------------------
+
+Si le nombre total d’avertissements atteint {WARNINGS_COUNT} votre compte sera banni automatiquement.
+
+Si vous avez des questions à propos de cet avertissement, veuillez contacter {WARNING_POSTER}.
+
+{EMAIL_SIG}
