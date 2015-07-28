@@ -128,7 +128,7 @@ class listener implements EventSubscriberInterface
 			$warning = unserialize($row['log_data']);
 
 			$user[] = array(
-				'U_EDIT'            => ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
+				'U_EDIT'            => ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=-rxu-AdvancedWarnings-mcp-warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
 
 				'USERNAME_FULL'	    => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
 				'USERNAME_COLOUR'   => ($row['user_colour']) ? '#' . $row['user_colour'] : '',
@@ -153,7 +153,7 @@ class listener implements EventSubscriberInterface
 	{
 		$user_id = (int) $event['data']['user_id'];
 		$template_data = $event['template_data'];
-		$template_data['U_WARN'] = ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=warn_user&amp;u=' . $user_id) : '';
+		$template_data['U_WARN'] = ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=-rxu-AdvancedWarnings-mcp-warnings_module&amp;mode=warn_user&amp;u=' . $user_id) : '';
 		$event['template_data'] = $template_data;
 	}
 
@@ -224,7 +224,7 @@ class listener implements EventSubscriberInterface
 			'POSTER_BANNED'		=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? true : ((isset($this->users_banned[$poster_id])) ? true : false),
 			'POSTER_BAN_END'	=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? $this->user->lang('BANNED_BY_X_WARNINGS', (int) $this->config['warnings_for_ban']) : ((isset($this->users_banned[$poster_id])) ? (($this->users_banned[$poster_id]['warning_end'] > 0) ? sprintf($this->user->lang['BANNED_UNTIL'], $this->user->format_date($this->users_banned[$poster_id]['warning_end'])) : $this->user->lang['BANNED_PERMANENTLY']) : ''),
 		));
-		$postrow['U_WARN'] = ($this->auth->acl_get('m_warn') && $poster_id != $this->user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $post_id, true, $this->user->session_id) : '';
+		$postrow['U_WARN'] = ($this->auth->acl_get('m_warn') && $poster_id != $this->user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=-rxu-AdvancedWarnings-mcp-warnings_module&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $post_id, true, $this->user->session_id) : '';
 
 		$event['post_row'] = $postrow;
 	}
