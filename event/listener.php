@@ -40,6 +40,12 @@ class listener implements EventSubscriberInterface
 	/** @var string phpEx */
 	protected $php_ext;
 
+	/** @var array */
+	public $warnings;
+
+	/** @var array */
+	public $users_banned;
+
 	/**
 	* Constructor
 	*
@@ -50,7 +56,6 @@ class listener implements EventSubscriberInterface
 	* @param \phpbb\user                          $user             User object
 	* @param string                               $phpbb_root_path  phpbb_root_path
 	* @param string                               $php_ext          phpEx
-	* @return \rxu\AdvancedWarnings\event\listener
 	* @access public
 	*/
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\template\template $template, \phpbb\user $user, $phpbb_root_path, $php_ext)
@@ -108,9 +113,9 @@ class listener implements EventSubscriberInterface
 
 		// Warnings list
 		$this->user->add_lang_ext('rxu/AdvancedWarnings', 'warnings');
-		$sql = 'SELECT w.warning_id, w.post_id, w.warning_time, w.warning_end, w.warning_type, w.warning_status, l.user_id, l.log_data, l.reportee_id, u.username, u.user_colour 
-			FROM ' . WARNINGS_TABLE . ' w, ' . LOG_TABLE . ' l, ' . USERS_TABLE . " u  
-				WHERE w.user_id = $user_id 
+		$sql = 'SELECT w.warning_id, w.post_id, w.warning_time, w.warning_end, w.warning_type, w.warning_status, l.user_id, l.log_data, l.reportee_id, u.username, u.user_colour
+			FROM ' . WARNINGS_TABLE . ' w, ' . LOG_TABLE . ' l, ' . USERS_TABLE . " u
+				WHERE w.user_id = $user_id
 					AND l.log_id = w.log_id
 					AND u.user_id = l.user_id
 						ORDER BY w.warning_status DESC, w.warning_id DESC";
@@ -170,9 +175,9 @@ class listener implements EventSubscriberInterface
 
 	private function get_warnings_data()
 	{
-		//Pull warnings data
-		$sql = 'SELECT w.post_id, w.warning_time, w.warning_end, w.warning_type, w.warning_status, l.user_id, l.log_data, l.reportee_id, u.username, u.user_colour 
-			FROM ' . WARNINGS_TABLE . ' w, ' . LOG_TABLE . ' l, ' . USERS_TABLE . ' u  
+		// Pull warnings data
+		$sql = 'SELECT w.post_id, w.warning_time, w.warning_end, w.warning_type, w.warning_status, l.user_id, l.log_data, l.reportee_id, u.username, u.user_colour
+			FROM ' . WARNINGS_TABLE . ' w, ' . LOG_TABLE . ' l, ' . USERS_TABLE . ' u
 				WHERE w.warning_status = 1
 					AND l.log_id = w.log_id
 					AND u.user_id = l.user_id';
@@ -193,13 +198,22 @@ class listener implements EventSubscriberInterface
 					'warning'		=> unserialize($row['log_data'])
 				);
 			}
+		}
+		$this->db->sql_freeresult($result);
 
-			if ($row['warning_type'] == self::BAN)
-			{
-				$this->users_banned[$row['reportee_id']] = array(
-					'warning_end'	=> $row['warning_end']
-				);
-			}
+		// Pull ban list data
+		$sql = 'SELECT b.ban_end, u.user_id
+			FROM ' . BANLIST_TABLE . ' b, ' . USERS_TABLE . ' u
+				WHERE (b.ban_end >= ' . time() . ' OR b.ban_end = 0)
+					AND u.user_id = b.ban_userid';
+
+		$result = $this->db->sql_query($sql);//, 86400);
+
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$this->users_banned[$row['user_id']] = array(
+				'ban_end'	=> $row['ban_end']
+			);
 		}
 		$this->db->sql_freeresult($result);
 	}
@@ -222,7 +236,7 @@ class listener implements EventSubscriberInterface
 			'WARNING_TIME'		=> isset($this->warnings[$row['post_id']]) ? $this->user->format_date($this->warnings[$row['post_id']]['warning_time']) : '',
 			'WARNING_TYPE'		=> isset($this->warnings[$row['post_id']]) ? $this->warnings[$row['post_id']]['warning_type'] : '',
 			'POSTER_BANNED'		=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? true : ((isset($this->users_banned[$poster_id])) ? true : false),
-			'POSTER_BAN_END'	=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? $this->user->lang('BANNED_BY_X_WARNINGS', (int) $this->config['warnings_for_ban']) : ((isset($this->users_banned[$poster_id])) ? (($this->users_banned[$poster_id]['warning_end'] > 0) ? sprintf($this->user->lang['BANNED_UNTIL'], $this->user->format_date($this->users_banned[$poster_id]['warning_end'])) : $this->user->lang['BANNED_PERMANENTLY']) : ''),
+			'POSTER_BAN_END'	=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? $this->user->lang('BANNED_BY_X_WARNINGS', (int) $this->config['warnings_for_ban']) : ((isset($this->users_banned[$poster_id])) ? (($this->users_banned[$poster_id]['ban_end'] > 0) ? sprintf($this->user->lang['BANNED_UNTIL'], $this->user->format_date($this->users_banned[$poster_id]['ban_end'])) : $this->user->lang['BANNED_PERMANENTLY']) : ''),
 		));
 		$postrow['U_WARN'] = ($this->auth->acl_get('m_warn') && $poster_id != $this->user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=\rxu\AdvancedWarnings\mcp\warnings_module&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $post_id, true, $this->user->session_id) : '';
 
@@ -234,7 +248,7 @@ class listener implements EventSubscriberInterface
 		$post_ids = $event['post_ids'];
 
 		// Adjust warning given for deleted post
-		$sql = 'UPDATE ' . WARNINGS_TABLE . ' 
+		$sql = 'UPDATE ' . WARNINGS_TABLE . '
 			SET post_id = 0
 			WHERE ' . $this->db->sql_in_set('post_id', $post_ids);
 		$this->db->sql_query($sql);
