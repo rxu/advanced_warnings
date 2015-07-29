@@ -1,10 +1,10 @@
 {
     "name": "rxu/AdvancedWarnings",
     "type": "phpbb-extension",
-    "description": "This extension replace built-in warnings system with the more advanced one.",
+    "description": "This extension replaces built-in warnings system with the more advanced one.",
     "homepage": "http://phpbbguru.net",
-    "version": "2.0.0",
-    "time": "2014-03-17",
+    "version": "2.0.1",
+    "time": "2015-07-28",
     "license": "GPL-2.0",
     "authors": [
         {
@@ -22,7 +22,7 @@
     "extra": {
         "display-name": "Advanced warnings",
         "soft-require": {
-           "phpbb/phpbb": "3.1.*@dev"
+           "phpbb/phpbb": "3.1.*"
         }
     }
 }
