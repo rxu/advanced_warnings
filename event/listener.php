@@ -81,7 +81,7 @@ class listener implements EventSubscriberInterface
 			'core.viewtopic_cache_user_data'			=> 'modify_viewtopic_usercache_data',
 			'core.viewtopic_modify_post_row'			=> 'modify_postrow',
 			'core.delete_posts_in_transaction'			=> 'handle_delete_posts',
-			'core.acp_board_config_edit_add'			=> 'add_acp_config',
+			'core.acp_board_config_edit_add'			=> array('add_acp_config', -2),
 			'core.adm_page_header'						=> 'add_acp_lang',
 			'core.modify_module_row'					=> 'modify_extra_url',
 		);
@@ -263,13 +263,11 @@ class listener implements EventSubscriberInterface
 
 		if ($mode == 'settings')
 		{
-			unset($display_vars['vars']['legend2']);
+			$warnings_for_ban = array(
+				'warnings_for_ban' => array('lang' => 'WARNINGS_FOR_BAN', 'validate' => 'int', 'type' => 'text:1:2', 'explain' => true)
+			);
+			$display_vars['vars'] = phpbb_insert_config_array($display_vars['vars'], $warnings_for_ban, array('before' => 'warnings_expire_days'));
 			unset($display_vars['vars']['warnings_expire_days']);
-			unset($display_vars['vars']['legend3']);
-
-			$display_vars['vars']['legend_warnings'] = 'WARNINGS';
-			$display_vars['vars']['warnings_for_ban'] = array('lang' => 'WARNINGS_FOR_BAN', 'validate' => 'int', 'type' => 'text:1:2', 'explain' => true);
-			$display_vars['vars']['legend3'] = 'ACP_SUBMIT_CHANGES';
 			$event['display_vars'] = $display_vars;
 		}
 	}
