@@ -47,7 +47,7 @@ $lang = array_merge($lang, array(
 		1 => 'pour %d avertissement',
 		2 => 'pour %d avertissements',
 	),
-	'CANNOT_WARN_FOUNDER'	=> 'Vous ne pouvez pas avertir un fondateur.',
+	'CANNOT_WARN_FOUNDER'	=> 'Vous ne pouvez pas émettre un avertissement à un fondateur du forum.',
 	'EDIT_WARNING'			=> 'Modifier l’avertissement',
 	'LIST_WARNINGS'			=> array(
 		1 => '%d avertissement',
@@ -67,8 +67,8 @@ $lang = array_merge($lang, array(
 	'WARNING_POST'			=> 'Se rendre au message',
 	'WARNING_TIME'			=> 'Avertissement émis',
 
-	'LENGTH_WARNING_INVALID'		=> 'La date doit être au format <kbd>AAAA-MM-JJ</kbd>.',
-	'USER_WARNING_EDITED'			=> 'Avertissement modifié avec succès.',
+	'LENGTH_WARNING_INVALID'		=> 'Saisir une date suivant le format <kbd>AAAA-MM-JJ</kbd>.',
+	'USER_WARNING_EDITED'			=> 'L’avertissement a été modifié avec succès.',
 	'WARNINGS_FOR_BAN'				=> 'Avertissements pour le bannissement',
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Nombre maximum d’avertissements pour qu’un utilisateur soit banni automatiquement durant une période à partir du dernier avertissement.',
 	'WARNINGS_GC'					=> 'Période de purge des avertissements',
