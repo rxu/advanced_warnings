@@ -33,24 +33,6 @@ class v_2_0_1 extends \phpbb\db\migration\migration
 		return array(
 			// Current version.
 			array('config.update', array('advanced_warnings_version', '2.0.1')),
-
-			// Replace line breaks to <br />.
-			array('custom', array(array($this, 'update_banlist_table'))),
-			array('custom', array(array($this, 'purge_cache'))),
 		);
-	}
-
-	public function update_banlist_table()
-	{
-		$sql = "UPDATE " . BANLIST_TABLE . "
-			SET ban_reason = REPLACE(REPLACE(ban_reason, '\n', '<br />'), '\r', '<br />'),
-			ban_give_reason = REPLACE(REPLACE(ban_give_reason, '\n', '<br />'), '\r', '<br />')";
-		$this->sql_query($sql);
-	}
-
-	public function purge_cache()
-	{
-		global $cache;
-		$cache->destroy('sql', array(BANLIST_TABLE));
 	}
 }
