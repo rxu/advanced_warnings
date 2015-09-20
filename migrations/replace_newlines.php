@@ -10,7 +10,7 @@
 
 namespace rxu\AdvancedWarnings\migrations;
 
-class replace_newlines extends \phpbb\db\migration\migration
+class replace_newlines extends \phpbb\db\migration\container_aware_migration
 {
 	static public function depends_on()
 	{
@@ -42,7 +42,7 @@ class replace_newlines extends \phpbb\db\migration\migration
 
 	public function purge_cache()
 	{
-		global $cache;
+		$cache = $this->container->get('cache');
 		$cache->destroy('sql', array(BANLIST_TABLE));
 	}
 }
