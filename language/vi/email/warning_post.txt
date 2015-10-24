@@ -1,0 +1,18 @@
+Subject: {SITENAME} - bạn đã bị cảnh báo
+
+Xin chào {USERNAME},
+
+Một cảnh báo đã được gửi tới bạn trên diễn đàn "{SITENAME}" bởi {WARNING_POSTER}.
+Cảnh báo về bạn dựa trên bài viết bạn đã viết tại chủ đề:
+
+{U_POST}
+
+----------------------------
+Lý do: {WARNING}
+Thời hạn: {WARNING_LENGTH}
+----------------------------
+Nếu số cảnh báo còn đang trong tình trạng hoạt động của bạn vượt quá {WARNINGS_COUNT} tài khoản của bạn sẽ tự động bị cấm.
+
+Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ {WARNING_POSTER}.
+
+{EMAIL_SIG}

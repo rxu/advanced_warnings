@@ -1,0 +1,48 @@
+Subject: {SITENAME} - Canh bao da duoc sua doi
+
+Xin chao {USERNAME},
+
+Mot canh bao cu duoc gui toi ban tren dien dan "{SITENAME}" da duoc sua doi boi {WARNING_POSTER}.
+
+Thong tin canh bao cu:
+----------------------------
+Loai: {WARNING_TYPE_OLD}
+Ly do: {WARNING_OLD}
+Thoi han: {WARNING_LENGTH_OLD}
+----------------------------
+
+Thong tin canh bao moi:
+----------------------------
+Loai: {WARNING_TYPE}
+Ly do: {WARNING}
+Thoi han: {WARNING_LENGTH}
+----------------------------
+
+Neu ban co bat ky cau hoi nao, vui long lien he {WARNING_POSTER}.
+
+{EMAIL_SIG}
+
+==================
+Subject: {SITENAME} - Cảnh báo đã được sửa đổi
+
+Xin chào {USERNAME},
+
+Một cảnh báo cũ được gửi tới bạn trên diễn đàn "{SITENAME}" đã được sửa đổi bởi {WARNING_POSTER}.
+
+Thông tin cảnh báo cũ:
+----------------------------
+Loại: {WARNING_TYPE_OLD}
+Lý do: {WARNING_OLD}
+Thời hạn: {WARNING_LENGTH_OLD}
+----------------------------
+
+Thông tin cảnh báo  mới:
+----------------------------
+Loại: {WARNING_TYPE}
+Lý do: {WARNING}
+Thời hạn: {WARNING_LENGTH}
+----------------------------
+
+Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ {WARNING_POSTER}.
+
+{EMAIL_SIG}

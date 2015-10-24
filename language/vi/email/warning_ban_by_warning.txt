@@ -1,0 +1,35 @@
+Subject: {SITENAME} - Tai khoan cua ban da bi khoa
+
+Xin chao {USERNAME},
+
+Tai khoan cua ban tai "{SITENAME}" da bi khoa boi {WARNING_POSTER}.
+Ban bi khoa vi da vi pham qua {WARNINGS_COUNT} so lan bi canh cao.
+
+----------------------------
+Ly do: {WARNING}
+Thoi gian: {WARNING_LENGTH}
+----------------------------
+Tai khoan cua ban co the duoc mo lại sau khi mot trong cac canh bao dang co cua ban het han va tong so canh bao hien tai it hon {WARNINGS_COUNT}.
+
+Neu ban co bat ky cau hoi nao, vui long lien he {WARNING_POSTER}.
+
+{EMAIL_SIG}
+
+=====================
+
+Subject: {SITENAME} - Tài khoản của bạn đã bị khóa
+
+Xin chào {USERNAME},
+
+Tài khoản của bạn tại "{SITENAME}" đã bị khóa bởi {WARNING_POSTER}.
+Bạn bị khóa vì đã vi phạm qúa {WARNINGS_COUNT} số lần bị cảnh cáo.
+
+----------------------------
+Lý do: {WARNING}
+Thời gian: {WARNING_LENGTH}
+----------------------------
+Tài khoản của bạn có thể được mở lại sau khi một trong các cảnh báo đang có của bạn hết hạn và tổng số cảnh báo hiện tại ít hơn {WARNINGS_COUNT}.
+
+Nếu bạn có bất kỳ câu hỏi nào, vui long lien he {WARNING_POSTER}.
+
+{EMAIL_SIG}

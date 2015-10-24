@@ -1,0 +1,17 @@
+Subject: {SITENAME} - tài khoản của bạn đã bị cấm
+
+Xin chào {USERNAME},
+
+Tài khoản của bạn tại diễn đàn "{SITENAME}" đã bị cấm bởi {WARNING_POSTER}.
+Bạn bị cấm vì những gì bạn đã viết trong chủ đề này:
+
+{U_POST}
+
+----------------------------
+Lý do: {WARNING}
+Thời hạn: {WARNING_LENGTH}
+----------------------------
+
+Nếu bạn có thắc mắc hay bất kỳ câu hỏi gì, vui lòng liên hệ {WARNING_POSTER}.
+
+{EMAIL_SIG}
