@@ -167,12 +167,12 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$this->db->sql_query($sql);
 
 				// Add to moderator log, admin log and user notes
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_UNBAN_USER', false, $l_unban_list);
-				$this->phpbb_log->add('mod', 0, 0, 'LOG_UNBAN_USER', false, $l_unban_list);
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_UNBAN_USER', false, array($l_unban_list));
+				$this->phpbb_log->add('mod', 0, 0, 'LOG_UNBAN_USER', false, array($l_unban_list));
 
 				foreach ($user_ids_ary as $user_id)
 				{
-					$this->phpbb_log->add('user', $user_id, 0, 'LOG_UNBAN_USER', false, $l_unban_list);
+					$this->phpbb_log->add('user', $user_id, 0, 'LOG_UNBAN_USER', false, array($l_unban_list));
 				}
 			}
 			$this->db->sql_transaction('commit');
