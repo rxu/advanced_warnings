@@ -22,12 +22,6 @@ class v_2_0_1 extends \phpbb\db\migration\migration
 		return array('\rxu\AdvancedWarnings\migrations\v_2_0_0');
 	}
 
-	public function revert_data()
-	{
-		return array(
-		);
-	}
-
 	public function update_data()
 	{
 		return array(
