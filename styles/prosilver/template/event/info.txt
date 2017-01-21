@@ -1,8 +1,8 @@
-ƒл¤ событи¤ memberlist_view_content_append.html
-данные готов¤тс¤ в
+Для события memberlist_view_content_append.html
+данные готовятся в
 ext\rxu\AdvancedWarnings\event\listener.php:146 memberlist_view_profile($event)
 
-ƒл¤ событи¤ viewtopic_body_postrow_post_notices_after.html
-данные готов¤тс¤ в ext\rxu\AdvancedWarnings\event\listener.php:viewtopic_modify_post_row
+Для события viewtopic_body_postrow_post_notices_after.html
+данные готовятся в ext\rxu\AdvancedWarnings\event\listener.php:viewtopic_modify_post_row
 
-ƒл¤ событи¤ viewtopic_body_contact_fields_after.html данные готов¤тс¤ в ext\rxu\AdvancedWarnings\event\listener.php:328 public function viewtopic_modify_post_row($event)
+Для события viewtopic_body_contact_fields_after.html данные готовятся в ext\rxu\AdvancedWarnings\event\listener.php:328 public function viewtopic_modify_post_row($event)
