@@ -43,7 +43,13 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	* @return \rxu\AdvancedWarnings\cron\task\rxu_tidy_warnings
 	* @access public
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\cache\driver\driver_interface $cache, \phpbb\log\log $phpbb_log)
+	public function __construct(
+		\phpbb\config\config $config,
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\user $user,
+		\phpbb\cache\driver\driver_interface $cache,
+		\phpbb\log\log $phpbb_log
+	)
 	{
 		$this->config = $config;
 		$this->db = $db;
@@ -77,15 +83,20 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	}
 
 	/**
-	* The main cron task code.
+	*	The main cron task code.
+	*	Уменьшает счётчик предупреждений в таблице users в поле user_warnings.
+	*	Разбанивает пользователей - удаляет из BANLIST_TABLE.
+	*	Пишет логи.
 	*/
 	public function cron_tidy_warnings($topic_ids = array())
 	{
-		$warning_list = $user_list = $unban_list = array();
+		$warning_list = $user_list = $unban_list = $pre_list = $ro_list = array();
 
 		$current_time = time();
 
-		$sql = 'SELECT * FROM ' . WARNINGS_TABLE . "
+		// Список всех активных взысканий, но с истёкшим сроком действия
+		$sql = 'SELECT warning_id, user_id, warning_type
+			FROM ' . WARNINGS_TABLE . "
 			WHERE warning_end < $current_time 
 			AND warning_end > 0 
 			AND warning_status = 1";
@@ -94,7 +105,18 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$warning_list[] = $row['warning_id'];
-			$user_list[$row['user_id']] = isset($user_list[$row['user_id']]) ? ++$user_list[$row['user_id']] : 1;
+			if ($row['warning_type'] == 4)
+			{
+				$pre_list[$row['user_id']] = isset($pre_list[$row['user_id']]) ? ++$pre_list[$row['user_id']] : 1;
+			}
+			elseif ($row['warning_type'] == 3)
+			{
+				$ro_list[$row['user_id']] = isset($ro_list[$row['user_id']]) ? ++$ro_list[$row['user_id']] : 1;
+			}
+			else
+			{
+				$user_list[$row['user_id']] = isset($user_list[$row['user_id']]) ? ++$user_list[$row['user_id']] : 1;
+			}
 		}
 		$this->db->sql_freeresult($result);
 
@@ -102,10 +124,12 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 		{
 			$this->db->sql_transaction('begin');
 
+			// Сброс статуса взыскания
 			$sql = 'UPDATE ' . WARNINGS_TABLE . ' SET warning_status = 0
 				WHERE ' . $this->db->sql_in_set('warning_id', $warning_list);
 			$this->db->sql_query($sql);
 
+			// Уменьшение количества предупреждений
 			foreach ($user_list as $user_id => $value)
 			{
 				$sql = 'UPDATE ' . USERS_TABLE . " SET user_warnings = user_warnings - $value
@@ -113,6 +137,27 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$this->db->sql_query($sql);
 			}
 
+			// Удаление из группы Премодерируемые пользователи
+			$group_pre = ($this->config['warnings_group_for_pre'] > 0) ? $this->config['warnings_group_for_pre'] : 1;
+			foreach ($pre_list as $user_id => $value)
+			{
+				$sql = 'DELETE FROM ' . USER_GROUP_TABLE . '
+					WHERE group_id = ' . $group_pre . '
+						AND user_id = ' . $user_id;
+				$this->db->sql_query($sql);
+			}
+
+			// Удаление из группы Читатели
+			$group_ro = ($this->config['warnings_group_for_ro'] > 0) ? $this->config['warnings_group_for_ro'] : 1;
+			foreach ($ro_list as $user_id => $value)
+			{
+				$sql = 'DELETE FROM ' . USER_GROUP_TABLE . '
+					WHERE group_id = ' . $group_ro . '
+						AND user_id = ' . $user_id;
+				$this->db->sql_query($sql);
+			}
+
+			// Разблокировка пользователя
 			// Try to get storage engine type to detect if transactions are supported
 			// to apply proper bans selection (MyISAM/InnoDB)
 			$operator = '<';

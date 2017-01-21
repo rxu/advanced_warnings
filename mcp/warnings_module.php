@@ -21,8 +21,10 @@ class warnings_module
 
 		if (!defined('WARNING'))
 		{
-			define('WARNING', 0);
-			define('BAN', 1);
+			define('WARNING', 0);		// Предупреждение
+			define('PRE', 4);			// Премодерация
+			define('RO', 3);			// Читатель
+			define('BAN', 1);			// Бан
 			define('WARNING_BAN', 2);
 		}
 	}
@@ -173,7 +175,7 @@ class warnings_module
 				'WARNING_TIME'		=> ($row['warning_end']) ? $user->format_date($row['warning_end']) : $user->lang['PERMANENT'],
 				'WARNINGS'			=> $user->format_date($row['warning_time']),
 				'WARNING_STATUS'	=> ($row['warning_status']) ? true : false,
-				'WARNING_TYPE'		=> ($row['warning_type'] == BAN) ? $user->lang['BAN'] : $user->lang['WARNING'],
+				'WARNING_TYPE'		=> $this->get_warning_type_text($row['warning_type']),
 				'U_WARNING_POST_URL'=> ($row['post_id']) ? append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'p=' . $row['post_id'] . '#p' . $row['post_id']) : '',
 				'U_EDIT'			=> ($auth->acl_get('m_warn')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=-rxu-AdvancedWarnings-mcp-warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $row['user_id'] . '&amp;warn_id=' . $row['warning_id']) : '',
 			));
@@ -203,7 +205,7 @@ class warnings_module
 	function mcp_warn_post_view($action)
 	{
 		global $phpEx, $phpbb_root_path, $config;
-		global $template, $db, $user, $request;
+		global $template, $db, $user, $request, $phpbb_dispatcher;
 
 		$post_id = $request->variable('p', 0);
 		$forum_id = $request->variable('f', 0);
@@ -337,12 +339,48 @@ class warnings_module
 					$msg = $user->lang['USER_WARNING_ADDED'];
 					$email_template = 'warning_post';
 
+					/**
+					* Event for after warning a user for a post.
+					*
+					* @event core.mcp_warn_post_after
+					* @var array	user_row	The entire user row
+					* @var string	warning		The warning message
+					* @var bool		notify		If true, the user was notified for the warning
+					* @var int		post_id		The post id for which the warning is added
+					* @var string	message		Message displayed to the moderator
+					* @since 3.1.0-b4
+					*/
+					$vars = array(
+							'user_row',
+							'warning',
+							'notify',
+							'post_id',
+							'message',
+					);
+					extract($phpbb_dispatcher->trigger_event('core.mcp_warn_post_after', compact($vars)));
+
 					if ($warn_type == BAN)
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
 						user_ban('user', $ban, $warn_len, $warn_len_other, 0, $warning, $warning);
 						$msg .= '<br /><br />' . $user->lang['BAN_UPDATE_SUCCESSFUL'];
+						$email_template = 'warning_post_ban';
+					}
+					elseif ($warn_type == PRE)
+					{
+						$ban = utf8_normalize_nfc($user_row['username']);
+						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
+						$this->user_pre($user_id);
+						$msg .= '<br /><br />' . $user->lang['PRE_GROUP_UPDATE'];
+						$email_template = 'warning_post_ban';
+					}
+					elseif ($warn_type == RO)
+					{
+						$ban = utf8_normalize_nfc($user_row['username']);
+						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
+						$this->user_ro($user_id);
+						$msg .= '<br /><br />' . $user->lang['RO_GROUP_UPDATE'];
 						$email_template = 'warning_post_ban';
 					}
 					else if ($warn_type == WARNING_BAN)
@@ -354,7 +392,7 @@ class warnings_module
 						if ($user_ban_id)
 						{
 							$sql = 'UPDATE ' . USERS_TABLE . "	SET user_ban_id = $user_ban_id
-								WHERE user_id = " . $user_row['user_id'];
+								WHERE user_id = " . $user_id;
 							$db->sql_query($sql);
 							$msg .= '<br /><br />' . $user->lang['BAN_UPDATE_SUCCESSFUL'];
 						}
@@ -431,21 +469,21 @@ class warnings_module
 		}
 
 		$template->assign_vars(array(
-			'U_POST_ACTION'		=> $this->u_action,
+			'U_POST_ACTION'	=> $this->u_action,
 
-			'POST'				=> $message,
-			'USERNAME'			=> $user_row['username'],
-			'USER_COLOR'		=> (!empty($user_row['user_colour'])) ? $user_row['user_colour'] : '',
-			'RANK_TITLE'		=> $rank_title,
-			'JOINED'			=> $user->format_date($user_row['user_regdate']),
-			'POSTS'				=> ($user_row['user_posts']) ? $user_row['user_posts'] : 0,
-			'WARNINGS'			=> ($user_row['user_warnings']) ? $user_row['user_warnings'] : 0,
-			'WARNING'			=> (isset($warning_edit[0])) ? $warning_edit[0] : '',
-			'WARNING_ID'		=> (isset($warning_row['warning_id'])) ? $warning_row['warning_id'] : '',
-			'WARNING_END'		=> (isset($warning_row['warning_end'])) ? (($warning_row['warning_end']) ? $user->format_date($warning_row['warning_end'], 'Y-m-d') : '') : '',
+			'POST'			=> $message,
+			'USERNAME'		=> $user_row['username'],
+			'USER_COLOR'	=> (!empty($user_row['user_colour'])) ? $user_row['user_colour'] : '',
+			'RANK_TITLE'	=> $rank_title,
+			'JOINED'		=> $user->format_date($user_row['user_regdate']),
+			'POSTS'			=> ($user_row['user_posts']) ? $user_row['user_posts'] : 0,
+			'WARNINGS'		=> ($user_row['user_warnings']) ? $user_row['user_warnings'] : 0,
+			'WARNING'		=> (isset($warning_edit[0])) ? $warning_edit[0] : '',
+			'WARNING_ID'	=> (isset($warning_row['warning_id'])) ? $warning_row['warning_id'] : '',
+			'WARNING_END'	=> (isset($warning_row['warning_end'])) ? (($warning_row['warning_end']) ? $user->format_date($warning_row['warning_end'], 'Y-m-d') : '') : '',
 
-			'AVATAR_IMG'		=> $avatar_img,
-			'RANK_IMG'			=> $rank_img,
+			'AVATAR_IMG'	=> $avatar_img,
+			'RANK_IMG'		=> $rank_img,
 
 			'L_WARNING_POST_DEFAULT'	=> sprintf($user->lang['WARNING_POST_DEFAULT'], generate_board_url() . "/viewtopic.$phpEx?f=$forum_id&amp;p=$post_id#p$post_id"),
 
@@ -459,7 +497,7 @@ class warnings_module
 	function mcp_warn_user_view($action)
 	{
 		global $phpEx, $phpbb_root_path, $config;
-		global $template, $db, $user, $request;
+		global $template, $db, $user, $request, $phpbb_dispatcher;
 
 		$user_id = $request->variable('u', 0);
 		$username = $request->variable('username', '', true);
@@ -573,6 +611,24 @@ class warnings_module
 					$msg = $user->lang['USER_WARNING_ADDED'];
 					$email_template = 'warning_user';
 
+					/**
+					* Event for after warning a user from MCP.
+					*
+					* @event core.mcp_warn_user_after
+					* @var array	user_row	The entire user row
+					* @var string	warning		The warning message
+					* @var bool		notify		If true, the user was notified for the warning
+					* @var string	message		Message displayed to the moderator
+					* @since 3.1.0-b4
+					*/
+					$vars = array(
+							'user_row',
+							'warning',
+							'notify',
+							'message',
+					);
+					extract($phpbb_dispatcher->trigger_event('core.mcp_warn_user_after', compact($vars)));
+
 					if ($warn_type == BAN)
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
@@ -580,6 +636,22 @@ class warnings_module
 						user_ban('user', $ban, $warn_len, $warn_len_other, 0, $warning, $warning);
 						$msg .= '<br /><br />' . $user->lang['BAN_UPDATE_SUCCESSFUL'];
 						$email_template = 'warning_user_ban';
+					}
+					elseif ($warn_type == PRE)
+					{
+						$ban = utf8_normalize_nfc($user_row['username']);
+						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
+						$this->user_pre($user_id);
+						$msg .= '<br /><br />' . $user->lang['PRE_GROUP_UPDATE'];
+						$email_template = 'warning_post_ban';
+					}
+					elseif ($warn_type == RO)
+					{
+						$ban = utf8_normalize_nfc($user_row['username']);
+						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
+						$this->user_ro($user_id);
+						$msg .= '<br /><br />' . $user->lang['RO_GROUP_UPDATE'];
+						$email_template = 'warning_post_ban';
 					}
 					else if ($warn_type == WARNING_BAN)
 					{
@@ -693,7 +765,7 @@ class warnings_module
 		global $phpEx, $phpbb_root_path, $config, $phpbb_log;
 		global $db, $user, $cache;
 
-		if (!in_array($warn_type, array(WARNING, BAN)))
+		if (!in_array($warn_type, array(WARNING, PRE, RO, BAN)))
 		{
 			$warn_type = WARNING;
 		}
@@ -710,7 +782,18 @@ class warnings_module
 
 			$message_parser = new \parse_message;
 
-			$message_parser->message = sprintf($lang['WARNING_PM_BODY'], $warning);
+			if ($warn_type == PRE)
+			{
+				$message_parser->message = sprintf($user->lang['WARNING_PRE_PM_BODY'], $user->format_date($warn_end), $warning);
+			}
+			elseif ($warn_type == RO)
+			{
+				$message_parser->message = sprintf($user->lang['WARNING_RO_PM_BODY'], $user->format_date($warn_end), $warning);
+			}
+			else
+			{
+				$message_parser->message = sprintf($lang['WARNING_PM_BODY'], $warning);
+			}
 			$message_parser->parse(true, true, true, false, false, true, true);
 
 			$pm_data = array(
@@ -728,11 +811,38 @@ class warnings_module
 				'address_list'			=> array('u' => array($user_row['user_id'] => 'to')),
 			);
 
-			submit_pm('post', $lang['WARNING_PM_SUBJECT'], $pm_data, false);
+			if ($warn_type == PRE)
+			{
+				$warning_pm = $user->lang['WARNING_PRE_PM_SUBJECT'];
+			}		
+			elseif ($warn_type == RO)
+			{
+				$warning_pm = $user->lang['WARNING_RO_PM_SUBJECT'];
+			}
+			else
+			{
+				$warning_pm = $lang['WARNING_PM_SUBJECT'];
+			}
+			submit_pm('post', $warning_pm, $pm_data, false);
 		}
 
-		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), array('username' => $user_row['username']));
-		$log_id = $phpbb_log->add('user', $user->data['user_id'], $user_row['user_ip'], 'LOG_USER_WARNING_BODY', time(), array($warning, 'reportee_id' => $user_row['user_id']));
+		if ($warn_type == PRE)
+		{		
+			$reason_text = 'LOG_USER_PRE';
+			$reason_text_body = 'LOG_USER_PRE_BODY';
+		}
+		elseif ($warn_type == RO)
+		{		
+			$reason_text = 'LOG_USER_RO';
+			$reason_text_body = 'LOG_USER_RO_BODY';
+		}
+		else
+		{
+			$reason_text = 'LOG_USER_WARNING';
+			$reason_text_body = 'LOG_USER_WARNING_BODY';
+		}
+		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, $reason_text, time(), array('username' => $user_row['username']));
+		$log_id = $phpbb_log->add('user', $user->data['user_id'], $user_row['user_ip'], $reason_text_body, time(), array($warning, 'reportee_id' => $user_row['user_id']));
 
 		$sql_ary = array(
 			'user_id'		=> $user_row['user_id'],
@@ -746,11 +856,14 @@ class warnings_module
 
 		$db->sql_query('INSERT INTO ' . WARNINGS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
 
-		$sql = 'UPDATE ' . USERS_TABLE . '
-			SET user_warnings = user_warnings + 1,
-				user_last_warning = ' . time() . '
-			WHERE user_id = ' . $user_row['user_id'];
-		$db->sql_query($sql);
+		if ($warn_type == WARNING)
+		{
+			$sql = 'UPDATE ' . USERS_TABLE . '
+				SET user_warnings = user_warnings + 1,
+					user_last_warning = ' . time() . '
+				WHERE user_id = ' . $user_row['user_id'];
+			$db->sql_query($sql);
+		}
 
 		$cache->destroy('sql', WARNINGS_TABLE);
 
@@ -762,32 +875,7 @@ class warnings_module
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		$phpbb_log->add('mod', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), array('forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], 'username' => $user_row['username']));
-	}
-
-	/**
-	* Lists warnings
-	*/
-	function view_warnings_list(&$users, &$user_count, $limit = 0, $offset = 0, $limit_days = 0, $sort_by = 'warning_time DESC')
-	{
-		global $db;
-
-		$sql = 'SELECT u.user_id, u.username, u.user_colour, u.user_warnings, u.user_last_warning, w.warning_id, w.warning_time, w.warning_end, w.warning_status, w.post_id, w.warning_type
-			FROM ' . WARNINGS_TABLE . ' w
-			LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = w.user_id
-			' . (($limit_days) ? " WHERE w.warning_time >= $limit_days" : '') . '
-			ORDER BY ' . ((strstr($sort_by, 'user')) ? 'u.' : 'w.') . $sort_by;
-		$result = $db->sql_query_limit($sql, $limit, $offset);
-		$users = $db->sql_fetchrowset($result);
-		$db->sql_freeresult($result);
-
-		$sql = 'SELECT count(warning_id) AS warnings_count
-			FROM ' . WARNINGS_TABLE . (($limit_days) ? " WHERE warning_time >= $limit_days" : '');
-		$result = $db->sql_query($sql);
-		$user_count = (int) $db->sql_fetchfield('warnings_count');
-		$db->sql_freeresult($result);
-
-		return;
+		$phpbb_log->add('mod', $user->data['user_id'], $user->ip, $reason_text, time(), array('forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], 'username' => $user_row['username']));
 	}
 
 	/**
@@ -805,7 +893,7 @@ class warnings_module
 		$warn_end = $this->get_warning_end($warn_len, $warn_len_other);
 
 		$warning_type_change = false;
-		if ($warning_row['warning_type'] != $warn_type && in_array($warn_type, array(WARNING, BAN)))
+		if ($warning_row['warning_type'] != $warn_type && in_array($warn_type, array(WARNING, PRE, RO, BAN)))
 		{
 			$warning_type_change = true;
 		}
@@ -867,14 +955,39 @@ class warnings_module
 	}
 
 	/**
+	* Lists warnings
+	*/
+	function view_warnings_list(&$users, &$user_count, $limit = 0, $offset = 0, $limit_days = 0, $sort_by = 'warning_time DESC')
+	{
+		global $db;
+
+		$sql = 'SELECT u.user_id, u.username, u.user_colour, u.user_warnings, u.user_last_warning, w.warning_id, w.warning_time, w.warning_end, w.warning_status, w.post_id, w.warning_type
+			FROM ' . WARNINGS_TABLE . ' w
+			LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = w.user_id
+			' . (($limit_days) ? " WHERE w.warning_time >= $limit_days" : '') . '
+			ORDER BY ' . ((strstr($sort_by, 'user')) ? 'u.' : 'w.') . $sort_by;
+		$result = $db->sql_query_limit($sql, $limit, $offset);
+		$users = $db->sql_fetchrowset($result);
+		$db->sql_freeresult($result);
+
+		$sql = 'SELECT count(warning_id) AS warnings_count
+			FROM ' . WARNINGS_TABLE . (($limit_days) ? " WHERE warning_time >= $limit_days" : '');
+		$result = $db->sql_query($sql);
+		$user_count = (int) $db->sql_fetchfield('warnings_count');
+		$db->sql_freeresult($result);
+
+		return;
+	}
+
+	/**
 	* Display warning options
 	*/
-	function display_warn_options($default = 0)
+	function display_warn_options($default = 20160)
 	{
 		global $user, $template;
 
 		// Ban length options
-		$warn_end_text = array(0 => $user->lang['PERMANENT'], 30 => $user->lang['30_MINS'], 60 => $user->lang['1_HOUR'], 360 => $user->lang['6_HOURS'], 1440 => $user->lang['1_DAY'], 10080 => $user->lang['7_DAYS'], 20160 => $user->lang['2_WEEKS'], 40320 => $user->lang['1_MONTH'], -1 => $user->lang['UNTIL'] . ' -&gt; ');
+		$warn_end_text = array(0 => $user->lang['PERMANENT'], /*30 => $user->lang['30_MINS'], 60 => $user->lang['1_HOUR'], 360 => $user->lang['6_HOURS'], */1440 => $user->lang['1_DAYS'], 4320 => $user->lang['3_DAYS'], 10080 => $user->lang['1_WEEK'], 20160 => $user->lang['2_WEEKS'], 40320 => $user->lang['1_MONTH'], -1 => $user->lang['UNTIL'] . ' -&gt; ');
 
 		$warn_end_options = '';
 		foreach ($warn_end_text as $length => $text)
@@ -896,7 +1009,7 @@ class warnings_module
 		global $auth, $user, $template;
 
 		// Warning type options
-		$warn_type_text = array(WARNING => $user->lang['WARNING'], BAN => $user->lang['BAN']);
+		$warn_type_text = array(WARNING => $user->lang['WARNING'], PRE => $user->lang['WARNING_PRE'], RO => $user->lang['WARNING_RO'], BAN => $user->lang['BAN']);
 
 		if (!$auth->acl_get('m_ban'))
 		{
@@ -969,5 +1082,95 @@ class warnings_module
 		$messenger->send($user_row['user_notify_type']);
 
 		return true;
+	}
+
+	/*
+	*	Отправка пользователя в группу "Премодерируемые пользователи"
+	*/
+	function user_pre($user_id)
+	{
+		global $config, $db, $user;
+
+		$group_pre = ($config['warnings_group_for_pre'] > 0) ? $config['warnings_group_for_pre'] : 1;
+
+		$sql = 'SELECT COUNT(group_id) AS total
+			FROM ' . USER_GROUP_TABLE . '
+			WHERE group_id = ' . $group_pre . '
+				AND user_id = ' . $user_id;
+
+		$result = $db->sql_query($sql);
+		$exist_user = (bool) $db->sql_fetchfield('total');
+		$db->sql_freeresult($result);
+
+		if (!$exist_user)
+		{
+			$sql_ary = array(
+				'group_id'		=> $group_pre,
+				'user_id'		=> $user_id,
+				'group_leader'	=> 0,
+				'user_pending'	=> 0,
+			);
+
+			$db->sql_query('INSERT INTO ' . USER_GROUP_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+		}
+	}
+
+	/*
+	*	Отправка пользователя в группу "Читатели"
+	*/
+	function user_ro($user_id)
+	{
+		global $config, $db, $user;
+
+		$group_ro = ($config['warnings_group_for_ro'] > 0) ? $config['warnings_group_for_ro'] : 1;
+
+		$sql = 'SELECT COUNT(group_id) AS total
+			FROM ' . USER_GROUP_TABLE . '
+			WHERE group_id = ' . $group_ro . '
+				AND user_id = ' . $user_id;
+
+		$result = $db->sql_query($sql);
+		$exist_user = (bool) $db->sql_fetchfield('total');
+		$db->sql_freeresult($result);
+
+		if (!$exist_user)
+		{
+			$sql_ary = array(
+				'group_id'		=> $group_ro,
+				'user_id'		=> $user_id,
+				'group_leader'	=> 0,
+				'user_pending'	=> 0,
+			);
+
+			$db->sql_query('INSERT INTO ' . USER_GROUP_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+		}
+	}
+
+	/*
+	*	Возвращает название взыскания
+	*/
+	private function get_warning_type_text($warning_type)
+	{
+		global $user;
+
+		switch ($warning_type)
+		{
+			case PRE:
+				$text = $user->lang['WARNING_PRE'];
+				break;
+
+			case RO:
+				$text = $user->lang['WARNING_RO'];
+				break;
+
+			case BAN:
+				$text = $user->lang['BAN'];
+				break;
+
+			default:
+				$text = $user->lang['WARNING'];
+				break;
+		}
+		return $text;
 	}
 }

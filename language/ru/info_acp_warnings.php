@@ -34,16 +34,20 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
+	'RXU_ACP_WARNINGS'					=> 'Advanced Warnings',
+	'RXU_ACP_WARNINGS_EXPLAIN'			=> 'Настройки Advanced Warnings',
+	'WARNINGS_VERSION'					=> 'Версия: <strong>%s</strong>',
+	'ACP_WARNINGS_SETTINGS_UPDATED'		=> '<strong>Изменены настройки Advanced Warnings</strong>',
+	'RXU_ACP_WARNINGS_SETTINGS'			=> 'Настройки',
+	'RXU_ACP_WARNINGS_COMMON'			=> 'Общие настройки',
+	'WARNINGS_VISIBLE_GROUPS'			=> 'Видимость взысканий для выбранных групп',
+	'WARNINGS_VISIBLE_GROUPS_EXPLAIN'	=> 'Выберите группы пользователей, которые должны видеть взыскания других пользователей. Для срабатывания функции видимости пользователь должен находится в выбранной группе по умолчанию. Для множественного выбора удерживайте клавишу Ctrl.',
+	'WARNINGS_GROUP_FOR_PRE'			=> 'Группа для Премодерируемых пользователей',
+	'WARNINGS_GROUP_FOR_RO'				=> 'Группа для Читателей',
+	'RXU_ACP_NOT_CHOSEN'				=> 'Не выбрано',
 
-	'RXU_WARN_FRONT'	=> 'Главная страница',
-	'RXU_WARN_LIST'		=> 'Предупреждения',
-	'RXU_WARN_USER'		=> 'Вынести предупреждение',
-	'RXU_WARN_POST'		=> 'Предупреждение за сообщение',
-
-	'WARNING_PRE_PM_SUBJECT'	=> 'Ваши сообщения будут проверяться модераторами',
-	'WARNING_PRE_PM_BODY'		=> 'К Вам применено взыскание в виде отправки в группу "Премодерируемые пользователи" до %1$s.<br /><br />Причина:[quote]%2$s[/quote]',
-	'WARNING_RO_PM_SUBJECT'		=> 'Вам выдан читательский билет',
-	'WARNING_RO_PM_BODY'		=> 'К Вам применено взыскание в виде отправки в группу "Читатели" до %1$s.<br /><br />Причина:[quote]%2$s[/quote]',
+	'WARNINGS_GC'			=> 'Период обработки предупреждений',
+	'WARNINGS_GC_EXPLAIN'	=> 'Период (в секундах) для автоматического снятия истекших предупреждений.',
 
 	'LOG_USER_RO'		=> '<strong>Выдан читательский билет пользователю</strong><br />» %s',
 	'LOG_USER_PRE'		=> '<strong>Включена премодерация сообщений пользователя</strong><br />» %s',

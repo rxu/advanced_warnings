@@ -1,1 +1,6 @@
-<!-- IF postrow.WARNING --><div class="notice"><strong><!-- IF postrow.WARNING_TYPE eq 1 -->{L_BAN}<!-- ELSE -->{L_WARNING}<!-- ENDIF -->{L_COLON}</strong> {postrow.WARNING_POSTER} {postrow.WARNING_TIME}<br /><strong>{L_REASON}{L_COLON}</strong> <em>{postrow.WARNING}</em></div><!-- ENDIF -->
+<!-- IF postrow.VISIBILITY_PENALTIES and postrow.WARNING -->
+	<div class="notice">
+		<strong>{postrow.WARNING_TYPE}</strong> {postrow.WARNING_END}{L_COLON} {postrow.WARNING_POSTER} {postrow.WARNING_TIME}<br />
+		<strong>{L_REASON}{L_COLON}</strong> <em>{postrow.WARNING}</em>
+	</div>
+<!-- ENDIF -->
