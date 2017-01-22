@@ -121,14 +121,6 @@ class listener implements EventSubscriberInterface
 		$event['module'] = $module;
 	}
 
-	/**
-	* Preparing a user's data before displaying it in profile and memberlist
-	*
-	* @event core.memberlist_prepare_profile_data
-	* @var	array	data				Array with user's data
-	* @var	array	template_data		Template array with user's data
-	* @since 3.1.0-a1
-	*/
 	public function memberlist_prepare_profile_data($event)
 	{
 		$user_id = (int) $event['data']['user_id'];
@@ -140,23 +132,6 @@ class listener implements EventSubscriberInterface
 		$event['template_data'] = $template_data;
 	}
 
-	/**
-	* Modify user data before we display the profile
-	*
-	* @event core.memberlist_view_profile
-	* @var	array	member					Array with user's data
-	* @var	bool	user_notes_enabled		Is the mcp user notes module enabled?
-	* @var	bool	warn_user_enabled		Is the mcp warnings module enabled?
-	* @var	bool	zebra_enabled			Is the ucp zebra module enabled?
-	* @var	bool	friends_enabled			Is the ucp friends module enabled?
-	* @var	bool	foes_enabled			Is the ucp foes module enabled?
-	* @var	bool    friend					Is the user friend?
-	* @var	bool	foe						Is the user foe?
-	* @var	array	profile_fields			Array with user's profile field data
-	* @since 3.1.0-a1
-	* @changed 3.1.0-b2 Added friend and foe status
-	* @changed 3.1.0-b3 Added profile fields data
-	*/
 	public function memberlist_view_profile($event)
 	{
 		$user_id = (int) $event['member']['user_id'];
@@ -326,15 +301,6 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	/**
-	* Modify the users' data displayed with their posts
-	*
-	* @event core.viewtopic_cache_user_data
-	* @var	array	user_cache_data	Array with the user's data
-	* @var	int		poster_id		Poster's user id
-	* @var	array	row				Array with original user and post data
-	* @since 3.1.0-a1
-	*/
 	public function viewtopic_cache_user_data($event)
 	{
 		$user_cache_data = $event['user_cache_data'];
@@ -360,26 +326,6 @@ class listener implements EventSubscriberInterface
 		$event['user_cache_data'] = $user_cache_data;
 	}
 
-	/**
-	* Modify the posts template block
-	*
-	* @event core.viewtopic_modify_post_row
-	* @var	int		start				Start item of this page
-	* @var	int		current_row_number	Number of the post on this page
-	* @var	int		end					Number of posts on this page
-	* @var	int		total_posts			Total posts count
-	* @var	int		poster_id			Post author id
-	* @var	array	row					Array with original post and user data
-	* @var	array	cp_row				Custom profile field data of the poster
-	* @var	array	attachments			List of attachments
-	* @var	array	user_poster_data	Poster's data from user cache
-	* @var	array	post_row			Template block array of the post
-	* @var	array	topic_data			Array with topic data
-	* @since 3.1.0-a1
-	* @change 3.1.0-a3 Added vars start, current_row_number, end, attachments
-	* @change 3.1.0-b3 Added topic_data array, total_posts
-	* @change 3.1.0-RC3 Added poster_id
-	*/
 	public function viewtopic_modify_post_row($event)
 	{
 		$this->user->add_lang('acp/ban');
