@@ -342,7 +342,7 @@ class warnings_module
 					/**
 					* Event for after warning a user for a post.
 					*
-					* @event core.mcp_warn_post_after
+					* @event rxu.advancedwarnings.mcp_warn_post_after
 					* @var array	user_row	The entire user row
 					* @var string	warning		The warning message
 					* @var bool		notify		If true, the user was notified for the warning
@@ -357,7 +357,7 @@ class warnings_module
 							'post_id',
 							'message',
 					);
-					extract($phpbb_dispatcher->trigger_event('core.mcp_warn_post_after', compact($vars)));
+					extract($phpbb_dispatcher->trigger_event('rxu.advancedwarnings.mcp_warn_post_after', compact($vars)));
 
 					if ($warn_type == BAN)
 					{
@@ -367,7 +367,7 @@ class warnings_module
 						$msg .= '<br /><br />' . $user->lang['BAN_UPDATE_SUCCESSFUL'];
 						$email_template = 'warning_post_ban';
 					}
-					elseif ($warn_type == PRE)
+					else if ($warn_type == PRE)
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
@@ -375,7 +375,7 @@ class warnings_module
 						$msg .= '<br /><br />' . $user->lang['PRE_GROUP_UPDATE'];
 						$email_template = 'warning_post_ban';
 					}
-					elseif ($warn_type == RO)
+					else if ($warn_type == RO)
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
@@ -614,7 +614,7 @@ class warnings_module
 					/**
 					* Event for after warning a user from MCP.
 					*
-					* @event core.mcp_warn_user_after
+					* @event rxu.advancedwarnings.mcp_warn_user_after
 					* @var array	user_row	The entire user row
 					* @var string	warning		The warning message
 					* @var bool		notify		If true, the user was notified for the warning
@@ -627,7 +627,7 @@ class warnings_module
 							'notify',
 							'message',
 					);
-					extract($phpbb_dispatcher->trigger_event('core.mcp_warn_user_after', compact($vars)));
+					extract($phpbb_dispatcher->trigger_event('rxu.advancedwarnings.mcp_warn_user_after', compact($vars)));
 
 					if ($warn_type == BAN)
 					{
@@ -637,7 +637,7 @@ class warnings_module
 						$msg .= '<br /><br />' . $user->lang['BAN_UPDATE_SUCCESSFUL'];
 						$email_template = 'warning_user_ban';
 					}
-					elseif ($warn_type == PRE)
+					else if ($warn_type == PRE)
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
@@ -645,7 +645,7 @@ class warnings_module
 						$msg .= '<br /><br />' . $user->lang['PRE_GROUP_UPDATE'];
 						$email_template = 'warning_post_ban';
 					}
-					elseif ($warn_type == RO)
+					else if ($warn_type == RO)
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
@@ -786,7 +786,7 @@ class warnings_module
 			{
 				$message_parser->message = sprintf($user->lang['WARNING_PRE_PM_BODY'], $user->format_date($warn_end), $warning);
 			}
-			elseif ($warn_type == RO)
+			else if ($warn_type == RO)
 			{
 				$message_parser->message = sprintf($user->lang['WARNING_RO_PM_BODY'], $user->format_date($warn_end), $warning);
 			}
@@ -814,8 +814,8 @@ class warnings_module
 			if ($warn_type == PRE)
 			{
 				$warning_pm = $user->lang['WARNING_PRE_PM_SUBJECT'];
-			}		
-			elseif ($warn_type == RO)
+			}
+			else if ($warn_type == RO)
 			{
 				$warning_pm = $user->lang['WARNING_RO_PM_SUBJECT'];
 			}
@@ -827,12 +827,12 @@ class warnings_module
 		}
 
 		if ($warn_type == PRE)
-		{		
+		{
 			$reason_text = 'LOG_USER_PRE';
 			$reason_text_body = 'LOG_USER_PRE_BODY';
 		}
-		elseif ($warn_type == RO)
-		{		
+		else if ($warn_type == RO)
+		{
 			$reason_text = 'LOG_USER_RO';
 			$reason_text_body = 'LOG_USER_RO_BODY';
 		}
