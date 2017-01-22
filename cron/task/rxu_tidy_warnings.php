@@ -109,7 +109,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 			{
 				$pre_list[$row['user_id']] = isset($pre_list[$row['user_id']]) ? ++$pre_list[$row['user_id']] : 1;
 			}
-			elseif ($row['warning_type'] == 3)
+			else if ($row['warning_type'] == 3)
 			{
 				$ro_list[$row['user_id']] = isset($ro_list[$row['user_id']]) ? ++$ro_list[$row['user_id']] : 1;
 			}
