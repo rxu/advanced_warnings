@@ -194,7 +194,7 @@ class acp_warnings_module
 
 		$s_groups_options = '<select id="' . $key . '" name="' . $key . '[]" multiple="multiple" size="10">';
 
-		while($row = $db->sql_fetchrow($result))
+		while ($row = $db->sql_fetchrow($result))
 		{
 			$s_groups_options .= '<option value="' . $row['group_id'] . '"';
 			if (in_array($row['group_id'], $groups_ary))
@@ -233,7 +233,7 @@ class acp_warnings_module
 
 		$s_groups_options = '<option value="0">- ' . $this->user->lang('RXU_ACP_NOT_CHOSEN') . ' -</option>';
 
-		while($row = $db->sql_fetchrow($result))
+		while ($row = $db->sql_fetchrow($result))
 		{
 			$s_groups_options .= '<option value="' . $row['group_id'] . '"';
 			if ($row['group_id'] == $config[$key])
