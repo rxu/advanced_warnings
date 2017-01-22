@@ -30,13 +30,13 @@ class acp_warnings_module
 
 	public function main($id, $mode)
 	{
-		global $config, $request, $template, $user, $phpbb_container;
+		global $phpbb_container;
 
-		$this->config = $config;
+		$this->config = $phpbb_container->get('config');
 		$this->log = $phpbb_container->get('log');
-		$this->request = $request;
-		$this->template = $template;
-		$this->user = $user;
+		$this->request = $phpbb_container->get('request');
+		$this->template = $phpbb_container->get('template');
+		$this->user = $phpbb_container->get('user');
 
 		$this->tpl_name = 'acp_warnings';
 		$this->page_title = $this->user->lang['RXU_ACP_WARNINGS'];
