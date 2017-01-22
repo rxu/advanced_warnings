@@ -371,7 +371,8 @@ class warnings_module
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
-						$this->user_pre($user_id);
+						$group_pre = ($config['warnings_group_for_pre'] > 0) ? $config['warnings_group_for_pre'] : 1;
+						group_user_add($group_pre, $user_id);
 						$msg .= '<br /><br />' . $user->lang['PRE_GROUP_UPDATE'];
 						$email_template = 'warning_post_ban';
 					}
@@ -379,7 +380,8 @@ class warnings_module
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
-						$this->user_ro($user_id);
+						$group_ro = ($config['warnings_group_for_ro'] > 0) ? $config['warnings_group_for_ro'] : 1;
+						group_user_add($group_ro, $user_id);
 						$msg .= '<br /><br />' . $user->lang['RO_GROUP_UPDATE'];
 						$email_template = 'warning_post_ban';
 					}
@@ -641,7 +643,8 @@ class warnings_module
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
-						$this->user_pre($user_id);
+						$group_pre = ($config['warnings_group_for_pre'] > 0) ? $config['warnings_group_for_pre'] : 1;
+						group_user_add($group_pre, $user_id);
 						$msg .= '<br /><br />' . $user->lang['PRE_GROUP_UPDATE'];
 						$email_template = 'warning_post_ban';
 					}
@@ -649,7 +652,8 @@ class warnings_module
 					{
 						$ban = utf8_normalize_nfc($user_row['username']);
 						$warning = str_replace(array("\r", "\n"), '<br />', $warning);
-						$this->user_ro($user_id);
+						$group_ro = ($config['warnings_group_for_ro'] > 0) ? $config['warnings_group_for_ro'] : 1;
+						group_user_add($group_ro, $user_id);
 						$msg .= '<br /><br />' . $user->lang['RO_GROUP_UPDATE'];
 						$email_template = 'warning_post_ban';
 					}
@@ -1082,68 +1086,6 @@ class warnings_module
 		$messenger->send($user_row['user_notify_type']);
 
 		return true;
-	}
-
-	/*
-	*	Отправка пользователя в группу "Премодерируемые пользователи"
-	*/
-	function user_pre($user_id)
-	{
-		global $config, $db, $user;
-
-		$group_pre = ($config['warnings_group_for_pre'] > 0) ? $config['warnings_group_for_pre'] : 1;
-
-		$sql = 'SELECT COUNT(group_id) AS total
-			FROM ' . USER_GROUP_TABLE . '
-			WHERE group_id = ' . $group_pre . '
-				AND user_id = ' . $user_id;
-
-		$result = $db->sql_query($sql);
-		$exist_user = (bool) $db->sql_fetchfield('total');
-		$db->sql_freeresult($result);
-
-		if (!$exist_user)
-		{
-			$sql_ary = array(
-				'group_id'		=> $group_pre,
-				'user_id'		=> $user_id,
-				'group_leader'	=> 0,
-				'user_pending'	=> 0,
-			);
-
-			$db->sql_query('INSERT INTO ' . USER_GROUP_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
-		}
-	}
-
-	/*
-	*	Отправка пользователя в группу "Читатели"
-	*/
-	function user_ro($user_id)
-	{
-		global $config, $db, $user;
-
-		$group_ro = ($config['warnings_group_for_ro'] > 0) ? $config['warnings_group_for_ro'] : 1;
-
-		$sql = 'SELECT COUNT(group_id) AS total
-			FROM ' . USER_GROUP_TABLE . '
-			WHERE group_id = ' . $group_ro . '
-				AND user_id = ' . $user_id;
-
-		$result = $db->sql_query($sql);
-		$exist_user = (bool) $db->sql_fetchfield('total');
-		$db->sql_freeresult($result);
-
-		if (!$exist_user)
-		{
-			$sql_ary = array(
-				'group_id'		=> $group_ro,
-				'user_id'		=> $user_id,
-				'group_leader'	=> 0,
-				'user_pending'	=> 0,
-			);
-
-			$db->sql_query('INSERT INTO ' . USER_GROUP_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
-		}
 	}
 
 	/*
