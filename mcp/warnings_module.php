@@ -318,6 +318,10 @@ class warnings_module
 			$warn_type = WARNING_BAN;
 			$warning = $user->lang('WARNING_BAN', ((int) $user_row['user_warnings'] + 1), $warning);
 		}
+		else if (!$warning_id && ($user_row['user_warnings'] + 1 >= $config['number_of_warnings_for_ro']))
+		{
+			$warn_type = RO;
+		}
 
 		if ($warning && $action == 'add_warning')
 		{
@@ -591,6 +595,10 @@ class warnings_module
 		{
 			$warn_type = WARNING_BAN;
 			$warning = $user->lang('WARNING_BAN', ((int) $user_row['user_warnings'] + 1), $warning);
+		}
+		else if (!$warning_id && ($user_row['user_warnings'] + 1 >= $config['number_of_warnings_for_ro']))
+		{
+			$warn_type = RO;
 		}
 
 		if ($warning && $action == 'add_warning')
