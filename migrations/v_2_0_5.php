@@ -30,6 +30,7 @@ class v_2_0_5 extends \phpbb\db\migration\migration
 
 			// Add configs														// Комментарий
 			array('config.add', array('warnings_visible_groups', '')),			// Видимость взысканий для выбранных групп
+			array('config.add', array('number_of_warnings_for_ro', 3)),			// Количество предупреждений для автоматического перевода в Читатели
 		);
 	}
 }
