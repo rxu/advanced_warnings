@@ -52,10 +52,11 @@ class acp_warnings_module
 					'title'	=> 'RXU_ACP_WARNINGS',
 					'vars'	=> array(
 						'legend1'	=> 'RXU_ACP_WARNINGS_COMMON',
-						'warnings_visible_groups'	=> array('lang' => 'WARNINGS_VISIBLE_GROUPS',	'validate' => 'string',	'type' => 'custom',		'explain' => true,	'method' => 'multi_select_groups'),
-						'warnings_group_for_pre'	=> array('lang' => 'WARNINGS_GROUP_FOR_PRE',	'validate' => 'int',	'type' => 'select',		'explain' => false,	'method' => 'select_groups'),
-						'warnings_group_for_ro'		=> array('lang' => 'WARNINGS_GROUP_FOR_RO',		'validate' => 'int',	'type' => 'select',		'explain' => false,	'method' => 'select_groups'),
-						'warnings_gc'				=> array('lang' => 'WARNINGS_GC',				'validate' => 'int:1',	'type' => 'text:4:10',	'explain' => true,	'append' => ' ' . $this->user->lang['SECONDS']),
+						'warnings_visible_groups'	=> array('lang' => 'WARNINGS_VISIBLE_GROUPS',	'validate' => 'string',	'type' => 'custom',			'explain' => true,	'method' => 'multi_select_groups'),
+						'warnings_group_for_pre'	=> array('lang' => 'WARNINGS_GROUP_FOR_PRE',	'validate' => 'int',	'type' => 'select',			'explain' => false,	'method' => 'select_groups'),
+						'warnings_group_for_ro'		=> array('lang' => 'WARNINGS_GROUP_FOR_RO',		'validate' => 'int',	'type' => 'select',			'explain' => false,	'method' => 'select_groups'),
+						'number_of_warnings_for_ro'	=> array('lang' => 'NUMBER_OF_WARNINGS_FOR_RO',	'validate' => 'int:1',	'type' => 'number:1:9',		'explain' => true),
+						'warnings_gc'				=> array('lang' => 'WARNINGS_GC',				'validate' => 'int:1',	'type' => 'number:600:7200','explain' => true,	'append' => ' ' . $this->user->lang['SECONDS']),
 
 						'legend2'	=> 'ACP_SUBMIT_CHANGES',
 					)
