@@ -59,6 +59,16 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	}
 
 	/**
+	* Условия активации задачи.
+	*
+	* @return bool
+	*/
+	public function is_runnable()
+	{
+		return true;
+	}
+
+	/**
 	* Runs this cron task.
 	*
 	* @return null
@@ -79,7 +89,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	*/
 	public function should_run()
 	{
-		return $this->config['warnings_last_gc'] < time() - $this->config['warnings_gc'];
+		return (bool) ($this->config['warnings_last_gc'] < time() - $this->config['warnings_gc']);
 	}
 
 	/**
@@ -90,6 +100,10 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	*/
 	public function cron_tidy_warnings($topic_ids = array())
 	{
+		global $phpbb_root_path, $phpEx;
+
+		include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+
 		$warning_list = $user_list = $unban_list = $pre_list = $ro_list = array();
 
 		$current_time = time();
@@ -107,11 +121,11 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 			$warning_list[] = $row['warning_id'];
 			if ($row['warning_type'] == 4)
 			{
-				$pre_list[$row['user_id']] = isset($pre_list[$row['user_id']]) ? ++$pre_list[$row['user_id']] : 1;
+				$pre_list[] = $row['user_id'];
 			}
 			else if ($row['warning_type'] == 3)
 			{
-				$ro_list[$row['user_id']] = isset($ro_list[$row['user_id']]) ? ++$ro_list[$row['user_id']] : 1;
+				$ro_list[] = $row['user_id'];
 			}
 			else
 			{
@@ -138,23 +152,17 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 			}
 
 			// Удаление из группы Премодерируемые пользователи
-			$group_pre = ($this->config['warnings_group_for_pre'] > 0) ? $this->config['warnings_group_for_pre'] : 1;
-			foreach ($pre_list as $user_id => $value)
+			if (sizeof($pre_list))
 			{
-				$sql = 'DELETE FROM ' . USER_GROUP_TABLE . '
-					WHERE group_id = ' . $group_pre . '
-						AND user_id = ' . $user_id;
-				$this->db->sql_query($sql);
+				$group_pre = ($this->config['warnings_group_for_pre'] > 0) ? $this->config['warnings_group_for_pre'] : 1;
+				group_user_del($group_pre, $pre_list);
 			}
 
 			// Удаление из группы Читатели
-			$group_ro = ($this->config['warnings_group_for_ro'] > 0) ? $this->config['warnings_group_for_ro'] : 1;
-			foreach ($ro_list as $user_id => $value)
+			if (sizeof($ro_list))
 			{
-				$sql = 'DELETE FROM ' . USER_GROUP_TABLE . '
-					WHERE group_id = ' . $group_ro . '
-						AND user_id = ' . $user_id;
-				$this->db->sql_query($sql);
+				$group_ro = ($this->config['warnings_group_for_ro'] > 0) ? $this->config['warnings_group_for_ro'] : 1;
+				group_user_del($group_ro, $ro_list);
 			}
 
 			// Разблокировка пользователя
@@ -224,6 +232,6 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 		}
 
 		$this->cache->destroy('sql', array(WARNINGS_TABLE, BANLIST_TABLE));
-		$this->config->set('warnings_last_gc', time(), true);
+		$this->config->set('warnings_last_gc', $current_time, true);
 	}
 }
