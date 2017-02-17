@@ -59,7 +59,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	}
 
 	/**
-	* Условия активации задачи.
+	* Returns whether this cron task can run, given current board configuration.
 	*
 	* @return bool
 	*/
@@ -94,9 +94,9 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 
 	/**
 	*	The main cron task code.
-	*	Уменьшает счётчик предупреждений в таблице users в поле user_warnings.
-	*	Разбанивает пользователей - удаляет из BANLIST_TABLE.
-	*	Пишет логи.
+	*	Reduces counter warnings in the users table in user_warnings field.
+	*	UnBan Users - remove from BANLIST_TABLE.
+	*	He writes logs.
 	*/
 	public function cron_tidy_warnings($topic_ids = array())
 	{
@@ -108,7 +108,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 
 		$current_time = time();
 
-		// Список всех активных взысканий, но с истёкшим сроком действия
+		// List of active penalties, but EXPIRED
 		$sql = 'SELECT warning_id, user_id, warning_type
 			FROM ' . WARNINGS_TABLE . "
 			WHERE warning_end < $current_time 
@@ -138,12 +138,12 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 		{
 			$this->db->sql_transaction('begin');
 
-			// Сброс статуса взыскания
+			// Resetting the recovery status
 			$sql = 'UPDATE ' . WARNINGS_TABLE . ' SET warning_status = 0
 				WHERE ' . $this->db->sql_in_set('warning_id', $warning_list);
 			$this->db->sql_query($sql);
 
-			// Уменьшение количества предупреждений
+			// Reducing the number of alerts
 			foreach ($user_list as $user_id => $value)
 			{
 				$sql = 'UPDATE ' . USERS_TABLE . " SET user_warnings = user_warnings - $value
@@ -151,21 +151,20 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$this->db->sql_query($sql);
 			}
 
-			// Удаление из группы Премодерируемые пользователи
+			// Removing users from a group Pre-moderating
 			if (sizeof($pre_list))
 			{
 				$group_pre = ($this->config['warnings_group_for_pre'] > 0) ? $this->config['warnings_group_for_pre'] : 1;
 				group_user_del($group_pre, $pre_list);
 			}
 
-			// Удаление из группы Читатели
+			// Removal of the group Readers
 			if (sizeof($ro_list))
 			{
 				$group_ro = ($this->config['warnings_group_for_ro'] > 0) ? $this->config['warnings_group_for_ro'] : 1;
 				group_user_del($group_ro, $ro_list);
 			}
 
-			// Разблокировка пользователя
 			// Try to get storage engine type to detect if transactions are supported
 			// to apply proper bans selection (MyISAM/InnoDB)
 			$operator = '<';
