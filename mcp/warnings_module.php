@@ -793,11 +793,11 @@ class warnings_module
 
 			if ($warn_type == self::PRE)
 			{
-				$message_parser->message = sprintf($lang['WARNING_PRE_PM_BODY'], $user->format_date($warn_end), $warning);
+				$message_parser->message = sprintf($user->lang['WARNING_PRE_PM_BODY'], $user->format_date($warn_end), $warning);
 			}
 			else if ($warn_type == self::READ_ONLY)
 			{
-				$message_parser->message = sprintf($lang['WARNING_RO_PM_BODY'], $user->format_date($warn_end), $warning);
+				$message_parser->message = sprintf($user->lang['WARNING_RO_PM_BODY'], $user->format_date($warn_end), $warning);
 			}
 			else
 			{
@@ -822,11 +822,11 @@ class warnings_module
 
 			if ($warn_type == self::PRE)
 			{
-				$warning_pm = $lang['WARNING_PRE_PM_SUBJECT'];
+				$warning_pm = $user->lang['WARNING_PRE_PM_SUBJECT'];
 			}
 			else if ($warn_type == self::READ_ONLY)
 			{
-				$warning_pm = $lang['WARNING_RO_PM_SUBJECT'];
+				$warning_pm = $user->lang['WARNING_RO_PM_SUBJECT'];
 			}
 			else
 			{
