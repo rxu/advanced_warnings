@@ -17,10 +17,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class listener implements EventSubscriberInterface
 {
-	const WARNING = 0;		// Предупреждение
-	const PRE = 4;			// Премодерация
-	const RO = 3;			// Читатель
-	const BAN = 1;			// Бан
+	const WARNING = 0;		// Warning
+	const PRE = 4;			// Pre-moderation
+	const RO = 3;			// Reader
+	const BAN = 1;			// Ban
 	const WARNING_BAN = 2;
 
 	/** @var \phpbb\config\config */
@@ -179,7 +179,7 @@ class listener implements EventSubscriberInterface
 
 	private function get_warnings_data()
 	{
-		// Список взысканий с группировкой по id сообщений
+		// List of sanctions with the group by id messages
 		$sql = 'SELECT w.post_id, w.warning_time, w.warning_end, w.warning_type, w.warning_status, l.user_id, l.log_data, l.reportee_id, u.username, u.user_colour
 			FROM ' . WARNINGS_TABLE . ' w, ' . LOG_TABLE . ' l, ' . USERS_TABLE . ' u
 			WHERE w.warning_status = 1
@@ -204,7 +204,7 @@ class listener implements EventSubscriberInterface
 		}
 		$this->db->sql_freeresult($result);
 
-		// Список PRE с группировкой по id пользователей
+		// List PRE grouped by user id
 		$sql = 'SELECT user_id, MAX(warning_end) AS warning_end
 			FROM ' . WARNINGS_TABLE . '
 			WHERE warning_status = 1
@@ -220,7 +220,7 @@ class listener implements EventSubscriberInterface
 		}
 		$this->db->sql_freeresult($result);
 
-		// Список РО с группировкой по id пользователей
+		// List RO grouped by user id
 		$sql = 'SELECT user_id, MAX(warning_end) AS warning_end
 			FROM ' . WARNINGS_TABLE . '
 			WHERE warning_status = 1
@@ -236,7 +236,7 @@ class listener implements EventSubscriberInterface
 		}
 		$this->db->sql_freeresult($result);
 
-		// Список банов с группировкой по id пользователей
+		// List BAN grouped by user id
 		$sql = 'SELECT b.ban_end, u.user_id
 			FROM ' . BANLIST_TABLE . ' b, ' . USERS_TABLE . ' u
 			WHERE (b.ban_end >= ' . time() . ' OR b.ban_end = 0)
@@ -308,7 +308,7 @@ class listener implements EventSubscriberInterface
 			'user_ban_id'	=> (isset($row['user_ban_id'])) ? $row['user_ban_id'] : 0,
 		));
 
-		// Корректировка количества предупреждений
+		// Change of the number of warnings
 		$sql = 'SELECT COUNT(warning_id) AS total
 			FROM ' . WARNINGS_TABLE . '
 			WHERE user_id = ' . $poster_id . '
@@ -367,7 +367,7 @@ class listener implements EventSubscriberInterface
 	}
 
 	/*
-	*	Возвращает количество предупреждений пользователя
+	*	Returns the number of user alert
 	*/
 	private function get_numberof_warnings($user_id)
 	{
@@ -384,7 +384,7 @@ class listener implements EventSubscriberInterface
 	}
 
 	/*
-	*	Возвращает название взыскания
+	*	Returns the name of punishment
 	*/
 	private function get_warning_type_text($warning_type)
 	{
