@@ -19,7 +19,7 @@ class listener implements EventSubscriberInterface
 {
 	const WARNING = 0;		// Warning
 	const PRE = 4;			// Pre-moderation
-	const RO = 3;			// Reader
+	const READ_ONLY = 3;	// Reader
 	const BAN = 1;			// Ban
 	const WARNING_BAN = 2;
 
@@ -208,7 +208,7 @@ class listener implements EventSubscriberInterface
 		$sql = 'SELECT user_id, MAX(warning_end) AS warning_end
 			FROM ' . WARNINGS_TABLE . '
 			WHERE warning_status = 1
-				AND warning_type = 4
+				AND warning_type = ' . self::PRE . '
 			GROUP BY user_id';
 		$result = $this->db->sql_query($sql);
 
@@ -220,11 +220,11 @@ class listener implements EventSubscriberInterface
 		}
 		$this->db->sql_freeresult($result);
 
-		// List RO grouped by user id
+		// List READ_ONLY grouped by user id
 		$sql = 'SELECT user_id, MAX(warning_end) AS warning_end
 			FROM ' . WARNINGS_TABLE . '
 			WHERE warning_status = 1
-				AND warning_type = 3
+				AND warning_type = ' . self::READ_ONLY . '
 			GROUP BY user_id';
 		$result = $this->db->sql_query($sql);
 
@@ -312,7 +312,7 @@ class listener implements EventSubscriberInterface
 		$sql = 'SELECT COUNT(warning_id) AS total
 			FROM ' . WARNINGS_TABLE . '
 			WHERE user_id = ' . $poster_id . '
-				AND warning_type = 0
+				AND warning_type = ' . self::WARNING . '
 				AND warning_status = 1';
 
 		$result = $this->db->sql_query($sql);
@@ -375,7 +375,7 @@ class listener implements EventSubscriberInterface
 			FROM ' . WARNINGS_TABLE . '
 			WHERE user_id = ' . $user_id . '
 				AND warning_status = 1
-				AND warning_type = 0';
+				AND warning_type = ' . self::WARNING;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
@@ -394,7 +394,7 @@ class listener implements EventSubscriberInterface
 				$text = $this->user->lang['WARNING_PRE'];
 				break;
 
-			case self::RO:
+			case self::READ_ONLY:
 				$text = $this->user->lang['WARNING_RO'];
 				break;
 
