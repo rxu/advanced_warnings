@@ -179,7 +179,7 @@ class acp_warnings_module
 	}
 
 	/*
-	* Создаёт список групп для множественного выбора.
+	* Create a list of groups for the multiple-choice.
 	*/
 	function multi_select_groups($value, $key)
 	{
@@ -212,7 +212,7 @@ class acp_warnings_module
 			}
 			$s_groups_options .= '</option>';
 		}
-		$db->sql_freeresult($result);		// Освобождение памяти
+		$db->sql_freeresult($result);
 
 		$s_groups_options .= '</select>';
 
@@ -220,7 +220,7 @@ class acp_warnings_module
 	}
 
 	/*
-	* Создаёт список групп для выбора.
+	* Create a list of groups for select
 	*/
 	function select_groups($value, $key)
 	{
@@ -251,7 +251,7 @@ class acp_warnings_module
 			}
 			$s_groups_options .= '</option>';
 		}
-		$db->sql_freeresult($result);		// Освобождение памяти
+		$db->sql_freeresult($result);
 
 		return $s_groups_options;
 	}
