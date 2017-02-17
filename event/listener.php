@@ -17,6 +17,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class listener implements EventSubscriberInterface
 {
+	const WARNING = 0;		// Предупреждение
+	const PRE = 4;			// Премодерация
+	const RO = 3;			// Читатель
+	const BAN = 1;			// Бан
+	const WARNING_BAN = 2;
+
 	/** @var \phpbb\config\config */
 	protected $config;
 
@@ -73,15 +79,6 @@ class listener implements EventSubscriberInterface
 		$this->config = $config;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
-
-		if (!defined('WARNING'))
-		{
-			define('WARNING', 0);		// Предупреждение
-			define('PRE', 4);			// Премодерация
-			define('RO', 3);			// Читатель
-			define('BAN', 1);			// Бан
-			define('WARNING_BAN', 2);
-		}
 
 		$this->warnings = $this->users_banned = $this->users_pre = $this->users_ro = array();
 		$this->get_warnings_data();
@@ -393,15 +390,15 @@ class listener implements EventSubscriberInterface
 	{
 		switch ($warning_type)
 		{
-			case PRE:
+			case self::PRE:
 				$text = $this->user->lang['WARNING_PRE'];
 				break;
 
-			case RO:
+			case self::RO:
 				$text = $this->user->lang['WARNING_RO'];
 				break;
 
-			case BAN:
+			case self::BAN:
 				$text = $this->user->lang['BAN'];
 				break;
 
