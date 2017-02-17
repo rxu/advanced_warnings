@@ -349,7 +349,7 @@ class warnings_module
 					* @var bool		notify		If true, the user was notified for the warning
 					* @var int		post_id		The post id for which the warning is added
 					* @var string	message		Message displayed to the moderator
-					* @since 3.1.0-b4
+					* @since 2.0.5
 					*/
 					$vars = array(
 							'user_row',
@@ -626,7 +626,7 @@ class warnings_module
 					* @var string	warning		The warning message
 					* @var bool		notify		If true, the user was notified for the warning
 					* @var string	message		Message displayed to the moderator
-					* @since 3.1.0-b4
+					* @since 2.0.5
 					*/
 					$vars = array(
 							'user_row',
@@ -793,11 +793,11 @@ class warnings_module
 
 			if ($warn_type == self::PRE)
 			{
-				$message_parser->message = sprintf($user->lang['WARNING_PRE_PM_BODY'], $user->format_date($warn_end), $warning);
+				$message_parser->message = sprintf($lang['WARNING_PRE_PM_BODY'], $user->format_date($warn_end), $warning);
 			}
 			else if ($warn_type == self::READ_ONLY)
 			{
-				$message_parser->message = sprintf($user->lang['WARNING_RO_PM_BODY'], $user->format_date($warn_end), $warning);
+				$message_parser->message = sprintf($lang['WARNING_RO_PM_BODY'], $user->format_date($warn_end), $warning);
 			}
 			else
 			{
@@ -822,11 +822,11 @@ class warnings_module
 
 			if ($warn_type == self::PRE)
 			{
-				$warning_pm = $user->lang['WARNING_PRE_PM_SUBJECT'];
+				$warning_pm = $lang['WARNING_PRE_PM_SUBJECT'];
 			}
 			else if ($warn_type == self::READ_ONLY)
 			{
-				$warning_pm = $user->lang['WARNING_RO_PM_SUBJECT'];
+				$warning_pm = $lang['WARNING_RO_PM_SUBJECT'];
 			}
 			else
 			{
@@ -996,7 +996,7 @@ class warnings_module
 		global $user, $template;
 
 		// Ban length options
-		$warn_end_text = array(0 => $user->lang['PERMANENT'], /*30 => $user->lang['30_MINS'], 60 => $user->lang['1_HOUR'], 360 => $user->lang['6_HOURS'], */1440 => $user->lang['1_DAYS'], 4320 => $user->lang['3_DAYS'], 10080 => $user->lang['1_WEEK'], 20160 => $user->lang['2_WEEKS'], 40320 => $user->lang['1_MONTH'], -1 => $user->lang['UNTIL'] . ' -&gt; ');
+		$warn_end_text = array(0 => $user->lang['PERMANENT'], 30 => $user->lang['30_MINS'], 60 => $user->lang['1_HOUR'], 360 => $user->lang['6_HOURS'], 1440 => $user->lang['1_DAYS'], 4320 => $user->lang['3_DAYS'], 10080 => $user->lang['1_WEEK'], 20160 => $user->lang['2_WEEKS'], 40320 => $user->lang['1_MONTH'], -1 => $user->lang['UNTIL'] . ' -&gt; ');
 
 		$warn_end_options = '';
 		foreach ($warn_end_text as $length => $text)
