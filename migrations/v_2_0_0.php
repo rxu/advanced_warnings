@@ -24,24 +24,17 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 
 	public function update_schema()
 	{
-		// If 'warning_type' column exists, most likely this is an upgrade from the 3.0 MOD
-		if (!$this->db_tools->sql_column_exists($this->table_prefix . 'warnings', 'warning_type'))
-		{
-			return 	array(
-				'add_columns' => array(
-					$this->table_prefix . 'users' => array(
-						'user_ban_id'		=> array('BOOL', 0),
-					),
-
-					$this->table_prefix . 'warnings' => array(
-						'warning_end'		=> array('INT:11', 0),
-						'warning_type'		=> array('BOOL', 0),
-						'warning_status'	=> array('BOOL', 0),
-					),
+		return 	array(
+			'add_columns' => array(
+				$this->table_prefix . 'users' => array(
+					'user_ban_id'		=> array('BOOL', 0),
 				),
-			);
-		}
-		return array(
+				$this->table_prefix . 'warnings' => array(
+					'warning_end'		=> array('INT:11', 0),
+					'warning_type'		=> array('BOOL', 0),
+					'warning_status'	=> array('BOOL', 0),
+				),
+			),
 		);
 	}
 
@@ -52,7 +45,6 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 				$this->table_prefix . 'users' => array(
 					'user_ban_id',
 				),
-
 				$this->table_prefix . 'warnings' => array(
 					'warning_end',
 					'warning_type',
