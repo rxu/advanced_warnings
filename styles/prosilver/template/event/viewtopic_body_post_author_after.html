@@ -1,0 +1,25 @@
+<!-- IF postrow.VISIBILITY_PENALTIES and postrow.POSTER_PRE -->
+	<dd style="background-color: #CCCC00; color: #fff; margin: 5px 0px; padding: 3px 0; text-align: center; width: 140px;">
+		{L_WARNING_PRE}{L_COLON} {postrow.POSTER_PRE_END}
+	</dd>
+<!-- ENDIF -->
+
+<!-- IF postrow.VISIBILITY_PENALTIES and postrow.POSTER_RO -->
+	<dd style="background-color: #FF6600; color: #fff; margin: 5px 0px; padding: 3px 0; text-align: center; width: 140px;">
+		{L_WARNING_RO}{L_COLON} {postrow.POSTER_RO_END}
+	</dd>
+<!-- ENDIF -->
+
+<!-- IF postrow.VISIBILITY_PENALTIES and postrow.POSTER_BANNED -->
+	<dd style="background-color: #CC3366; color: #fff; margin: 5px 0px; padding: 3px 0; text-align: center; width: 140px;">
+		{L_BANNED}{L_COLON} {postrow.POSTER_BAN_END}
+	</dd>
+<!-- ENDIF -->
+
+<!-- IF postrow.VISIBILITY_PENALTIES and (postrow.POSTER_PRE or postrow.POSTER_RO or postrow.POSTER_BANNED) -->
+	<style>
+		#profile-{postrow.POSTER_ID} {
+			display: none;
+		}
+	</style>
+<!-- ENDIF -->

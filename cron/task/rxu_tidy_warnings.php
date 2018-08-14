@@ -43,13 +43,29 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	* @return \rxu\AdvancedWarnings\cron\task\rxu_tidy_warnings
 	* @access public
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\cache\driver\driver_interface $cache, \phpbb\log\log $phpbb_log)
+	public function __construct(
+		\phpbb\config\config $config,
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\user $user,
+		\phpbb\cache\driver\driver_interface $cache,
+		\phpbb\log\log $phpbb_log
+	)
 	{
 		$this->config = $config;
 		$this->db = $db;
 		$this->user = $user;
 		$this->cache = $cache;
 		$this->phpbb_log = $phpbb_log;
+	}
+
+	/**
+	* Returns whether this cron task can run, given current board configuration.
+	*
+	* @return bool
+	*/
+	public function is_runnable()
+	{
+		return true;
 	}
 
 	/**
@@ -73,19 +89,28 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	*/
 	public function should_run()
 	{
-		return $this->config['warnings_last_gc'] < time() - $this->config['warnings_gc'];
+		return (bool) ($this->config['warnings_last_gc'] < time() - $this->config['warnings_gc']);
 	}
 
 	/**
-	* The main cron task code.
+	*	The main cron task code.
+	*	Reduces counter warnings in the users table in user_warnings field.
+	*	UnBan Users - remove from BANLIST_TABLE.
+	*	He writes logs.
 	*/
 	public function cron_tidy_warnings($topic_ids = array())
 	{
-		$warning_list = $user_list = $unban_list = array();
+		global $phpbb_root_path, $phpEx;
+
+		include_once($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+
+		$warning_list = $user_list = $unban_list = $pre_list = $ro_list = array();
 
 		$current_time = time();
 
-		$sql = 'SELECT * FROM ' . WARNINGS_TABLE . "
+		// List of active penalties, but EXPIRED
+		$sql = 'SELECT warning_id, user_id, warning_type
+			FROM ' . WARNINGS_TABLE . "
 			WHERE warning_end < $current_time 
 			AND warning_end > 0 
 			AND warning_status = 1";
@@ -94,7 +119,18 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$warning_list[] = $row['warning_id'];
-			$user_list[$row['user_id']] = isset($user_list[$row['user_id']]) ? ++$user_list[$row['user_id']] : 1;
+			if ($row['warning_type'] == 4)
+			{
+				$pre_list[] = $row['user_id'];
+			}
+			else if ($row['warning_type'] == 3)
+			{
+				$ro_list[] = $row['user_id'];
+			}
+			else
+			{
+				$user_list[$row['user_id']] = isset($user_list[$row['user_id']]) ? ++$user_list[$row['user_id']] : 1;
+			}
 		}
 		$this->db->sql_freeresult($result);
 
@@ -102,15 +138,31 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 		{
 			$this->db->sql_transaction('begin');
 
+			// Resetting the recovery status
 			$sql = 'UPDATE ' . WARNINGS_TABLE . ' SET warning_status = 0
 				WHERE ' . $this->db->sql_in_set('warning_id', $warning_list);
 			$this->db->sql_query($sql);
 
+			// Reducing the number of alerts
 			foreach ($user_list as $user_id => $value)
 			{
 				$sql = 'UPDATE ' . USERS_TABLE . " SET user_warnings = user_warnings - $value
 					WHERE user_id = $user_id";
 				$this->db->sql_query($sql);
+			}
+
+			// Removing users from a group Pre-moderating
+			if (sizeof($pre_list))
+			{
+				$group_pre = ($this->config['warnings_group_for_pre'] > 0) ? $this->config['warnings_group_for_pre'] : 1;
+				group_user_del($group_pre, $pre_list);
+			}
+
+			// Removal of the group Readers
+			if (sizeof($ro_list))
+			{
+				$group_ro = ($this->config['warnings_group_for_ro'] > 0) ? $this->config['warnings_group_for_ro'] : 1;
+				group_user_del($group_ro, $ro_list);
 			}
 
 			// Try to get storage engine type to detect if transactions are supported
@@ -179,6 +231,6 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 		}
 
 		$this->cache->destroy('sql', array(WARNINGS_TABLE, BANLIST_TABLE));
-		$this->config->set('warnings_last_gc', time(), true);
+		$this->config->set('warnings_last_gc', $current_time, true);
 	}
 }

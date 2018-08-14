@@ -59,13 +59,9 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 		return array(
 			array('custom', array(array($this, 'revert_module_auth'))),
 
-			// Revert warnings config values to default
+			// Revert warnings_gs value to default
 			array('config.update', array('warnings_gc', '14400')),
 			array('config.update', array('warnings_expire_days', '90')),
-
-			// Remove added config parameters
-			array('config.remove', array('warnings_for_ban')),
-			array('config.remove', array('advanced_warnings_version')),
 
 			array('custom', array(array($this, 'purge_cache'))),
 		);
@@ -105,7 +101,7 @@ class v_2_0_0 extends \phpbb\db\migration\migration
 			))),
 
 			// Add config
-			array('config.add', array('warnings_for_ban', '3')),
+			array('config.add', array('warnings_for_ban', '10')),
 			array('config.update', array('warnings_gc', '1800')),
 			array('config.update', array('warnings_expire_days', '0')),
 

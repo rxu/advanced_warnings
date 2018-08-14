@@ -56,6 +56,8 @@ $lang = array_merge($lang, array(
 	),
 	'PERMANENT'	=> 'Бессрочно',
 	'WARNING'				=> 'Предупреждение',
+	'WARNING_PRE'			=> 'Премодерация',
+	'WARNING_RO'			=> 'Читатель',
 	'WARNING_TYPE'			=> 'Вид',
 	'WARNINGS'				=> 'Предупреждения',
 	'WARNING_BAN'			=> array(
@@ -69,10 +71,11 @@ $lang = array_merge($lang, array(
 	'WARNING_POST'			=> 'Перейти к сообщению',
 	'WARNING_TIME'			=> 'Выдано',
 
+	'PENALTY'	=> 'Взыскание',
+	'PENALTIES'	=> 'Взыскания',
+
 	'LENGTH_WARNING_INVALID'		=> 'Дата должна быть задана в формате <kbd>ГГГГ-ММ-ДД</kbd>.',
 	'USER_WARNING_EDITED'			=> 'Предупреждение успешно отредактировано.',
 	'WARNINGS_FOR_BAN'				=> 'Предупреждений для бана',
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Максимальное число неснятых предупреждений, при достижении которого пользователь будет забанен автоматически.',
-	'WARNINGS_GC'					=> 'Период обработки предупреждений',
-	'WARNINGS_GC_EXPLAIN'			=> 'Период (в секундах) для автоматического снятия истекших предупреждений.',
 ));
