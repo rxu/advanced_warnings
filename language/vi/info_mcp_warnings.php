@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -33,11 +33,11 @@ if (empty($lang) || !is_array($lang))
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 
 	'RXU_WARN_FRONT'	=> 'Trang ngoài',
 	'RXU_WARN_LIST'		=> 'Danh sách cảnh báo',
 	'RXU_WARN_USER'		=> 'Thành viên',
 	'RXU_WARN_POST'		=> 'Trong bài viết',
 
-));
+]);

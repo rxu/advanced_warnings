@@ -14,22 +14,21 @@ class replace_newlines extends \phpbb\db\migration\container_aware_migration
 {
 	static public function depends_on()
 	{
-		return array('\rxu\advancedwarnings\migrations\v_2_0_1');
+		return ['\rxu\advancedwarnings\migrations\v_2_0_1'];
 	}
 
 	public function revert_data()
 	{
-		return array(
-		);
+		return [];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Replace line breaks to <br />.
-			array('custom', array(array($this, 'update_banlist_table'))),
-			array('custom', array(array($this, 'purge_cache'))),
-		);
+			['custom', [[$this, 'update_banlist_table']]],
+			['custom', [[$this, 'purge_cache']]],
+		];
 	}
 
 	public function update_banlist_table()
@@ -43,6 +42,6 @@ class replace_newlines extends \phpbb\db\migration\container_aware_migration
 	public function purge_cache()
 	{
 		$cache = $this->container->get('cache');
-		$cache->destroy('sql', array(BANLIST_TABLE));
+		$cache->destroy('sql', [BANLIST_TABLE]);
 	}
 }

@@ -20,7 +20,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -39,29 +39,29 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'BAN'					=> 'Ban',
 	'BANNED_UNTIL'			=> 'until %s',
 	'BANNED'				=> 'Banned',
 	'BANNED_PERMANENTLY'	=> 'Permanently',
-	'BANNED_BY_X_WARNINGS'	=> array(
+	'BANNED_BY_X_WARNINGS'	=> [
 		1 => 'by %d warning',
 		2 => 'by %d warnings',
-	),
+	],
 	'CANNOT_WARN_FOUNDER'	=> 'You cannot warn founder.',
 	'EDIT_WARNING'			=> 'Edit warning',
-	'LIST_WARNINGS'			=> array(
+	'LIST_WARNINGS'			=> [
 		1 => '%d warning',
 		2 => '%d warnings',
-	),
+	],
 	'PERMANENT'	=> 'Permanent',
 	'WARNING'				=> 'Warning',
 	'WARNING_TYPE'			=> 'Warning type',
 	'WARNINGS'				=> 'Warnings',
-	'WARNING_BAN'			=> array(
+	'WARNING_BAN'			=> [
 		1 => 'Banned by %d warning. Last warning reason: %s',
 		2 => 'Banned by %d warnings. Last warning reason: %s',
-	),
+	],
 	'WARNINGS_EXPLAIN'		=> 'Warnings list',
 	'WARNING_EXPIRES'		=> 'Warning expires',
 	'WARNING_EXPIRED'		=> 'Expired',
@@ -74,4 +74,4 @@ $lang = array_merge($lang, array(
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Maximum warnings for user to be banned automatically for a period of last warning length.',
 	'WARNINGS_GC'					=> 'Warnings pruning period',
 	'WARNINGS_GC_EXPLAIN'			=> 'Time (in seconds) to prune expired warnings periodically.',
-));
+]);

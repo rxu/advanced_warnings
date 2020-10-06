@@ -68,23 +68,23 @@ class listener implements EventSubscriberInterface
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
 
-		$this->warnings = $this->users_banned = array();
+		$this->warnings = $this->users_banned = [];
 		$this->get_warnings_data();
 	}
 
 	static public function getSubscribedEvents()
 	{
-		return array(
+		return [
 			'core.modify_mcp_modules_display_option'	=> 'set_display_option',
 			'core.memberlist_view_profile'				=> 'add_memberlist_info',
 			'core.memberlist_prepare_profile_data'		=> 'add_warn_link',
 			'core.viewtopic_cache_user_data'			=> 'modify_viewtopic_usercache_data',
 			'core.viewtopic_modify_post_row'			=> 'modify_postrow',
 			'core.delete_posts_in_transaction'			=> 'handle_delete_posts',
-			'core.acp_board_config_edit_add'			=> array('add_acp_config', -2),
+			'core.acp_board_config_edit_add'			=> ['add_acp_config', -2],
 			'core.adm_page_header'						=> 'add_acp_lang',
 			'core.modify_module_row'					=> 'modify_extra_url',
-		);
+		];
 	}
 
 	public function set_display_option($event)
@@ -109,7 +109,7 @@ class listener implements EventSubscriberInterface
 	public function add_memberlist_info($event)
 	{
 		$user_id = (int) $event['member']['user_id'];
-		$user = array();
+		$user = [];
 
 		// Warnings list
 		$this->user->add_lang_ext('rxu/advancedwarnings', 'warnings');
@@ -122,7 +122,7 @@ class listener implements EventSubscriberInterface
 
 		$result = $this->db->sql_query($sql);
 
-		$warning = array();
+		$warning = [];
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			if (!$this->auth->acl_get('m_warn') && !$row['warning_status'])
@@ -132,7 +132,7 @@ class listener implements EventSubscriberInterface
 
 			$warning = unserialize($row['log_data']);
 
-			$user[] = array(
+			$user[] = [
 				'U_EDIT'            => ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=-rxu-advancedwarnings-mcp-warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
 
 				'USERNAME_FULL'	    => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
@@ -144,7 +144,7 @@ class listener implements EventSubscriberInterface
 				'WARNING_STATUS'    => ($row['warning_status'] && $this->auth->acl_get('m_warn')) ? true : false,
 				'WARNING_TYPE'      => ($row['warning_type'] == self::BAN) ? $this->user->lang['BAN'] : $this->user->lang['WARNING'],
 				'U_WARNING_POST_URL'=> ($row['post_id']) ? append_sid("{$this->phpbb_root_path}viewtopic.$this->php_ext", 'p=' . $row['post_id'] . '#p' . $row['post_id']) : '',
-			);
+			];
 		}
 		$this->db->sql_freeresult($result);
 
@@ -167,9 +167,9 @@ class listener implements EventSubscriberInterface
 		$user_cache_data = $event['user_cache_data'];
 		$row = $event['row'];
 
-		$user_cache_data = array_merge($user_cache_data, array(
+		$user_cache_data = array_merge($user_cache_data, [
 			'user_ban_id'	=> (isset($row['user_ban_id'])) ? $row['user_ban_id'] : 0,
-		));
+		]);
 		$event['user_cache_data'] = $user_cache_data;
 	}
 
@@ -188,7 +188,7 @@ class listener implements EventSubscriberInterface
 		{
 			if ($row['post_id'])
 			{
-				$this->warnings[$row['post_id']] = array(
+				$this->warnings[$row['post_id']] = [
 					'warning_time'	=> $row['warning_time'],
 					'warning_end'	=> $row['warning_end'],
 					'warning_type'	=> $row['warning_type'],
@@ -196,7 +196,7 @@ class listener implements EventSubscriberInterface
 					'username'		=> $row['username'],
 					'user_colour'	=> $row['user_colour'],
 					'warning'		=> unserialize($row['log_data'])
-				);
+				];
 			}
 		}
 		$this->db->sql_freeresult($result);
@@ -211,9 +211,9 @@ class listener implements EventSubscriberInterface
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$this->users_banned[$row['user_id']] = array(
+			$this->users_banned[$row['user_id']] = [
 				'ban_end'	=> $row['ban_end']
-			);
+			];
 		}
 		$this->db->sql_freeresult($result);
 	}
@@ -230,14 +230,14 @@ class listener implements EventSubscriberInterface
 		$post_id = $row['post_id'];
 		$forum_id = $row['forum_id'];
 
-		$postrow = array_merge($postrow, array(
+		$postrow = array_merge($postrow, [
 			'WARNING'			=> isset($this->warnings[$row['post_id']]) ? bbcode_nl2br($this->warnings[$row['post_id']]['warning'][0]) : '',
 			'WARNING_POSTER'	=> isset($this->warnings[$row['post_id']]) ? get_username_string('full', $this->warnings[$row['post_id']]['user_id'], $this->warnings[$row['post_id']]['username'], $this->warnings[$row['post_id']]['user_colour']) : '',
 			'WARNING_TIME'		=> isset($this->warnings[$row['post_id']]) ? $this->user->format_date($this->warnings[$row['post_id']]['warning_time']) : '',
 			'WARNING_TYPE'		=> isset($this->warnings[$row['post_id']]) ? $this->warnings[$row['post_id']]['warning_type'] : '',
 			'POSTER_BANNED'		=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? true : ((isset($this->users_banned[$poster_id])) ? true : false),
 			'POSTER_BAN_END'	=> (isset($user_cache['user_ban_id']) && $user_cache['user_ban_id']) ? $this->user->lang('BANNED_BY_X_WARNINGS', (int) $this->config['warnings_for_ban']) : ((isset($this->users_banned[$poster_id])) ? (($this->users_banned[$poster_id]['ban_end'] > 0) ? sprintf($this->user->lang['BANNED_UNTIL'], $this->user->format_date($this->users_banned[$poster_id]['ban_end'])) : $this->user->lang['BANNED_PERMANENTLY']) : ''),
-		));
+		]);
 		$postrow['U_WARN'] = ($this->auth->acl_get('m_warn') && $poster_id != $this->user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=-rxu-advancedwarnings-mcp-warnings_module&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $post_id, true, $this->user->session_id) : '';
 
 		$event['post_row'] = $postrow;
@@ -263,10 +263,10 @@ class listener implements EventSubscriberInterface
 
 		if ($mode == 'settings')
 		{
-			$warnings_for_ban = array(
-				'warnings_for_ban' => array('lang' => 'WARNINGS_FOR_BAN', 'validate' => 'int', 'type' => 'text:1:2', 'explain' => true)
-			);
-			$display_vars['vars'] = phpbb_insert_config_array($display_vars['vars'], $warnings_for_ban, array('before' => 'warnings_expire_days'));
+			$warnings_for_ban = [
+				'warnings_for_ban' => ['lang' => 'WARNINGS_FOR_BAN', 'validate' => 'int', 'type' => 'text:1:2', 'explain' => true]
+			];
+			$display_vars['vars'] = phpbb_insert_config_array($display_vars['vars'], $warnings_for_ban, ['before' => 'warnings_expire_days']);
 			unset($display_vars['vars']['warnings_expire_days']);
 			$event['display_vars'] = $display_vars;
 		}

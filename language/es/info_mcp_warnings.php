@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -33,10 +33,10 @@ if (empty($lang) || !is_array($lang))
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 
 	'RXU_WARN_FRONT'	=> 'Página principal',
 	'RXU_WARN_LIST'		=> 'Lista de advertencias',
 	'RXU_WARN_USER'		=> 'Advertir a usuario',
 	'RXU_WARN_POST'		=> 'Advertir por mensaje',
-));
+]);

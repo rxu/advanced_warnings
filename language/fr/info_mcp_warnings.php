@@ -19,7 +19,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -38,11 +38,11 @@ if (empty($lang) || !is_array($lang))
 // ’ « » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 
 	'RXU_WARN_FRONT'	=> 'Première page',
 	'RXU_WARN_LIST'		=> 'Liste des avertissements',
 	'RXU_WARN_USER'		=> 'Avertir l’utilisateur',
 	'RXU_WARN_POST'		=> 'Avertir pour un message',
 
-));
+]);

@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -37,32 +37,32 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'BAN'					=> 'Бан',
 	'BANNED_UNTIL'			=> 'до: %s',
 	'BANNED'				=> 'Заблокувати',
 	'BANNED_PERMANENTLY'	=> 'Безстроково',
-	'BANNED_BY_X_WARNINGS'	=> array(
+	'BANNED_BY_X_WARNINGS'	=> [
 		1 => 'за %d попередження',
 		2 => 'за %d попередження',
 		3 => 'за %d попереджень',
-	),
+	],
 	'CANNOT_WARN_FOUNDER'	=> 'Ви не можете попередити засновника.',
 	'EDIT_WARNING'			=> 'Редагувати попередження',
-	'LIST_WARNINGS'			=> array(
+	'LIST_WARNINGS'			=> [
 		1 => '%d попередження',
 		2 => '%d попередження',
 		3 => '%d попереджень',
-	),
+	],
 	'PERMANENT'	=> 'Permanent',
 	'WARNING'				=> 'Попередження',
 	'WARNING_TYPE'			=> 'Вид',
 	'WARNINGS'				=> 'попередження',
-	'WARNING_BAN'			=> array(
+	'WARNING_BAN'			=> [
 		1 => 'Заблокований за %d попередження. Причина останнього попередження: %s',
 		2 => 'Заблокований за %d попередження. Причина останнього попередження: %s',
 		3 => 'Заблокований за %d попереджень. Причина останнього попередження: %s',
-	),
+	],
 	'WARNINGS_EXPLAIN'		=> 'Список попереджень',
 	'WARNING_EXPIRES'		=> 'Завершується',
 	'WARNING_EXPIRED'		=> 'Завершелося',
@@ -75,4 +75,4 @@ $lang = array_merge($lang, array(
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Максимальне число незнятих попереджень, при досягненні якого користувач буде забанений автоматично.',
 	'WARNINGS_GC'					=> 'Період обробки попереджень',
 	'WARNINGS_GC_EXPLAIN'			=> 'Період (у секундах) для автоматичного зняття минулих попереджень.',
-));
+]);
