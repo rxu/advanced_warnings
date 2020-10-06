@@ -1,25 +1,25 @@
 services:
-    rxu.AdvancedWarnings.listener:
-        class: rxu\AdvancedWarnings\event\listener
+    rxu.advancedwarnings.listener:
+        class: rxu\advancedwarnings\event\listener
         arguments:
-            - @config
-            - @dbal.conn
-            - @auth
-            - @template
-            - @user
-            - %core.root_path%
-            - %core.php_ext%
+            - '@config'
+            - '@dbal.conn'
+            - '@auth'
+            - '@template'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
         tags:
             - { name: event.listener }
 
-    rxu.AdvancedWarnings.cron.task.rxu_tidy_warnings:
-        class: rxu\AdvancedWarnings\cron\task\rxu_tidy_warnings
+    rxu.advancedwarnings.cron.task.rxu_tidy_warnings:
+        class: rxu\advancedwarnings\cron\task\rxu_tidy_warnings
         arguments:
-            - @config
-            - @dbal.conn
-            - @user
-            - @cache.driver
-            - @log
+            - '@config'
+            - '@dbal.conn'
+            - '@user'
+            - '@cache.driver'
+            - '@log'
         calls:
             - [set_name, [cron.task.core.rxu_tidy_warnings]]
         tags:

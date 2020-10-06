@@ -8,13 +8,13 @@
 *
 */
 
-namespace rxu\AdvancedWarnings\migrations;
+namespace rxu\advancedwarnings\migrations;
 
 class replace_newlines extends \phpbb\db\migration\container_aware_migration
 {
 	static public function depends_on()
 	{
-		return array('\rxu\AdvancedWarnings\migrations\v_2_0_1');
+		return array('\rxu\advancedwarnings\migrations\v_2_0_1');
 	}
 
 	public function revert_data()

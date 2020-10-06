@@ -8,12 +8,12 @@
 *
 */
 
-namespace rxu\AdvancedWarnings\cron\task;
+namespace rxu\advancedwarnings\cron\task;
 
 /**
 * Tidy topics cron task.
 *
-* @package AdvancedWarnings
+* @package advancedwarnings
 */
 class rxu_tidy_warnings extends \phpbb\cron\task\base
 {
@@ -40,7 +40,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	* @param \phpbb\user                          $user         User object
 	* @param \phpbb\cache\driver\driver_interface $cache        Cache driver object
 	* @param \phpbb\log\log                       $phpbb_log    Log object
-	* @return \rxu\AdvancedWarnings\cron\task\rxu_tidy_warnings
+	* @return \rxu\advancedwarnings\cron\task\rxu_tidy_warnings
 	* @access public
 	*/
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\cache\driver\driver_interface $cache, \phpbb\log\log $phpbb_log)
