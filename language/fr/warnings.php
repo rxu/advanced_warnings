@@ -19,7 +19,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -38,29 +38,29 @@ if (empty($lang) || !is_array($lang))
 // ’ « » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'BAN'					=> 'Bannir',
 	'BANNED_UNTIL'			=> 'jusqu’à %s',
 	'BANNED'				=> 'Banni',
 	'BANNED_PERMANENTLY'	=> 'Toujours',
-	'BANNED_BY_X_WARNINGS'	=> array(
+	'BANNED_BY_X_WARNINGS'	=> [
 		1 => 'pour %d avertissement',
 		2 => 'pour %d avertissements',
-	),
+	],
 	'CANNOT_WARN_FOUNDER'	=> 'Vous ne pouvez pas émettre un avertissement à un fondateur du forum.',
 	'EDIT_WARNING'			=> 'Modifier l’avertissement',
-	'LIST_WARNINGS'			=> array(
+	'LIST_WARNINGS'			=> [
 		1 => '%d avertissement',
 		2 => '%d avertissements',
-	),
+	],
 	'PERMANENT'	=> 'Toujours',
 	'WARNING'				=> 'Avertissement',
 	'WARNING_TYPE'			=> 'Type d’avertissement',
 	'WARNINGS'				=> 'Avertissements',
-	'WARNING_BAN'			=> array(
+	'WARNING_BAN'			=> [
 		1 => 'Banni pour %d avertissement. Raison du dernier avertissement : %s',
 		2 => 'Banni pour %d avertissements. Raison du dernier avertissement : %s',
-	),
+	],
 	'WARNINGS_EXPLAIN'		=> 'Liste des avertissements',
 	'WARNING_EXPIRES'		=> 'Avertissements expirés',
 	'WARNING_EXPIRED'		=> 'Expiré',
@@ -73,4 +73,4 @@ $lang = array_merge($lang, array(
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Nombre maximum d’avertissements pour qu’un utilisateur soit banni automatiquement durant une période à partir du dernier avertissement.',
 	'WARNINGS_GC'					=> 'Période de purge des avertissements',
 	'WARNINGS_GC_EXPLAIN'			=> 'Temps (en secondes) au bout duquel les avertissements seront purgés automatiquement.',
-));
+]);

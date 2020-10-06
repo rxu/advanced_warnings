@@ -20,7 +20,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -39,29 +39,29 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'BAN'					=> 'Cấm',
 	'BANNED_UNTIL'			=> 'tới %s',
 	'BANNED'				=> 'Đã bị cấm',
 	'BANNED_PERMANENTLY'	=> 'Vĩnh viễn',
-	'BANNED_BY_X_WARNINGS'	=> array(
+	'BANNED_BY_X_WARNINGS'	=> [
 		1 => 'bởi %d cảnh báo',
 		2 => 'bởi %d cảnh báo',
-	),
+	],
 	'CANNOT_WARN_FOUNDER'	=> 'Bạn không thể cảnh báo người sáng lập diễn đàn.',
 	'EDIT_WARNING'			=> 'Sửa cảnh báo',
-	'LIST_WARNINGS'			=> array(
+	'LIST_WARNINGS'			=> [
 		1 => '%d cảnh báo',
 		2 => '%d cảnh báo',
-	),
+	],
 	'PERMANENT'	=> 'Permanent',
 	'WARNING'				=> 'Cảnh báo',
 	'WARNING_TYPE'			=> 'Kiểu cảnh báo',
 	'WARNINGS'				=> 'Cảnh báo',
-	'WARNING_BAN'			=> array(
+	'WARNING_BAN'			=> [
 		1 => 'Đã bị cấm do %d cảnh báo. Lý do cho cảnh báo cuối cùng là: %s',
 		2 => 'Đã bị cấm do %d cảnh báo. Lý do cho cảnh báo cuối cùng là: %s',
-	),
+	],
 	'WARNINGS_EXPLAIN'		=> 'Danh sách cảnh báo',
 	'WARNING_EXPIRES'		=> 'Các cảnh báo đã hết hạn',
 	'WARNING_EXPIRED'		=> 'Đã hết hạn',
@@ -74,4 +74,4 @@ $lang = array_merge($lang, array(
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Số cảnh báo tối đa mà mỗi thành viên có thể nhận trước khi bị cấm trong một khoảng thời gian nhất định.',
 	'WARNINGS_GC'					=> 'Khoảng thời gian cấm',
 	'WARNINGS_GC_EXPLAIN'			=> 'Thời gian (theo giây) để xóa những cảnh báo đã hết hạn.',
-));
+]);

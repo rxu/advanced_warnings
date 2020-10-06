@@ -8,12 +8,12 @@
 *
 */
 
-namespace rxu\AdvancedWarnings\cron\task;
+namespace rxu\advancedwarnings\cron\task;
 
 /**
-* Tidy topics cron task.
+* Tidy warnings cron task.
 *
-* @package AdvancedWarnings
+* @package advancedwarnings
 */
 class rxu_tidy_warnings extends \phpbb\cron\task\base
 {
@@ -40,7 +40,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	* @param \phpbb\user                          $user         User object
 	* @param \phpbb\cache\driver\driver_interface $cache        Cache driver object
 	* @param \phpbb\log\log                       $phpbb_log    Log object
-	* @return \rxu\AdvancedWarnings\cron\task\rxu_tidy_warnings
+	* @return \rxu\advancedwarnings\cron\task\rxu_tidy_warnings
 	* @access public
 	*/
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\cache\driver\driver_interface $cache, \phpbb\log\log $phpbb_log)
@@ -79,9 +79,9 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 	/**
 	* The main cron task code.
 	*/
-	public function cron_tidy_warnings($topic_ids = array())
+	public function cron_tidy_warnings($topic_ids = [])
 	{
-		$warning_list = $user_list = $unban_list = array();
+		$warning_list = $user_list = $unban_list = [];
 
 		$current_time = time();
 
@@ -154,7 +154,7 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$result = $this->db->sql_query($sql);
 
 				$l_unban_list = '';
-				$user_ids_ary = array();
+				$user_ids_ary = [];
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$l_unban_list .= (($l_unban_list != '') ? ', ' : '') . $row['unban_info'];
@@ -167,18 +167,18 @@ class rxu_tidy_warnings extends \phpbb\cron\task\base
 				$this->db->sql_query($sql);
 
 				// Add to moderator log, admin log and user notes
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_UNBAN_USER', false, array($l_unban_list));
-				$this->phpbb_log->add('mod', 0, 0, 'LOG_UNBAN_USER', false, array($l_unban_list));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_UNBAN_USER', false, [$l_unban_list]);
+				$this->phpbb_log->add('mod', 0, 0, 'LOG_UNBAN_USER', false, [$l_unban_list]);
 
 				foreach ($user_ids_ary as $user_id)
 				{
-					$this->phpbb_log->add('user', $user_id, 0, 'LOG_UNBAN_USER', false, array($l_unban_list));
+					$this->phpbb_log->add('user', $user_id, 0, 'LOG_UNBAN_USER', false, [$l_unban_list]);
 				}
 			}
 			$this->db->sql_transaction('commit');
 		}
 
-		$this->cache->destroy('sql', array(WARNINGS_TABLE, BANLIST_TABLE));
+		$this->cache->destroy('sql', [WARNINGS_TABLE, BANLIST_TABLE]);
 		$this->config->set('warnings_last_gc', time(), true);
 	}
 }

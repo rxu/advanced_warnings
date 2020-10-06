@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -37,29 +37,29 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'BAN'					=> 'Excluir',
 	'BANNED_UNTIL'			=> 'hasta %s',
 	'BANNED'				=> 'Excluido',
 	'BANNED_PERMANENTLY'	=> 'Permanentemente',
-	'BANNED_BY_X_WARNINGS'	=> array(
+	'BANNED_BY_X_WARNINGS'	=> [
 		1 => 'por %d advertencia',
 		2 => 'por %d advertencias',
-	),
+	],
 	'CANNOT_WARN_FOUNDER'	=> 'No se puede advertir al fundador.',
 	'EDIT_WARNING'			=> 'Editar advertencia',
-	'LIST_WARNINGS'			=> array(
+	'LIST_WARNINGS'			=> [
 		1 => '%d advertencia',
 		2 => '%d advertencias',
-	),
+	],
 	'PERMANENT'	=> 'Permanent',
 	'WARNING'				=> 'Advertencia',
 	'WARNING_TYPE'			=> 'Tipo de advertencia',
 	'WARNINGS'				=> 'Advertencias',
-	'WARNING_BAN'			=> array(
+	'WARNING_BAN'			=> [
 		1 => 'Excluido por %d advertencia. Razón de la última advertencia: %s',
 		2 => 'Excluido por %d advertencias. Razón de la última advertencia: %s',
-	),
+	],
 	'WARNINGS_EXPLAIN'		=> 'Lista de advertencias',
 	'WARNING_EXPIRES'		=> 'La advertencia expira',
 	'WARNING_EXPIRED'		=> 'Expiradas',
@@ -72,4 +72,4 @@ $lang = array_merge($lang, array(
 	'WARNINGS_FOR_BAN_EXPLAIN'		=> 'Número de advertencias máximas para que el usuario sea excluido automáticamente por un período desde la última advertencia.',
 	'WARNINGS_GC'					=> 'Período para purgar advertencias',
 	'WARNINGS_GC_EXPLAIN'			=> 'Tiempo (en segundos) para purgar advertencias expiradas periódicamente.',
-));
+]);

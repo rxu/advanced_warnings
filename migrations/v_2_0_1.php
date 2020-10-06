@@ -8,7 +8,7 @@
 *
 */
 
-namespace rxu\AdvancedWarnings\migrations;
+namespace rxu\advancedwarnings\migrations;
 
 class v_2_0_1 extends \phpbb\db\migration\migration
 {
@@ -19,14 +19,14 @@ class v_2_0_1 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\rxu\AdvancedWarnings\migrations\v_2_0_0');
+		return ['\rxu\advancedwarnings\migrations\v_2_0_0'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Current version.
-			array('config.update', array('advanced_warnings_version', '2.0.1')),
-		);
+			['config.update', ['advanced_warnings_version', '2.0.1']],
+		];
 	}
 }
