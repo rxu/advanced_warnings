@@ -20,12 +20,12 @@ class acp_test extends \phpbb_functional_test_case
 		return ['rxu/advancedwarnings'];
 	}
 
-	public function test_update_counters_module()
+	public function test_acp_setting()
 	{
 		$this->login();
 		$this->admin_login();
 
-		$this->add_lang_ext('rxu/advancedwarnings', 'info_mcp_warnings');
+		$this->add_lang_ext('rxu/advancedwarnings', 'warnings');
 
 		$crawler = self::request('GET', "adm/index.php?sid={$this->sid}&i=acp_board&mode=settings");
 		$this->assertContainsLang('WARNINGS_FOR_BAN', $this->get_content());
