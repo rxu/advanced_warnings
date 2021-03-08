@@ -27,7 +27,7 @@ table.table1 .simplename	{	color: #333333;	font-weight: bold;	padding: 5px;text-
 						<td>{user.WARNING_TIME}</td>
 						<td style="width:40%;">{user.WARNING}</td>
 						<td><!-- IF user.U_WARNING_POST_URL --><a href="{user.U_WARNING_POST_URL}">{L_WARNING_POST}</a><!-- ELSE --> <!-- ENDIF --></td>
-						<td><!-- IF user.WARNING_STATUS --><a href="{user.U_EDIT}">{L_EDIT_WARNING}</a><!-- ELSE -->{L_WARNING_EXPIRED}<!-- ENDIF --></td>
+						<td><!-- IF user.U_EDIT --><!-- IF user.WARNING_STATUS --><a href="{user.U_EDIT}">{L_EDIT_WARNING}</a><!-- ELSE -->{L_WARNING_EXPIRED}<!-- ENDIF --><!-- ENDIF --></td>
 					</tr>
 				<!-- END user -->
 				</tbody>
