@@ -35,7 +35,7 @@ class warnings_module
 
 		if (is_array($action))
 		{
-			$action = current($action);
+			$action = key($action);
 		}
 
 		$this->page_title = 'MCP_WARN';
