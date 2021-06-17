@@ -731,7 +731,7 @@ class warnings_module
 			submit_pm('post', $lang['WARNING_PM_SUBJECT'], $pm_data, false);
 		}
 
-		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), ['username' => $user_row['username']]);
+		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), [$user_row['username']]);
 		$log_id = $phpbb_log->add('user', $user->data['user_id'], $user_row['user_ip'], 'LOG_USER_WARNING_BODY', time(), [$warning, 'reportee_id' => $user_row['user_id']]);
 
 		$sql_ary = [
@@ -762,7 +762,7 @@ class warnings_module
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		$phpbb_log->add('mod', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), ['forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], 'username' => $user_row['username']]);
+		$phpbb_log->add('mod', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), ['forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], $user_row['username']]);
 	}
 
 	/**
