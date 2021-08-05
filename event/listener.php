@@ -130,19 +130,31 @@ class listener implements EventSubscriberInterface
 				continue;
 			}
 
+			// Bug fix with incorrect display of warning expiration -->
+			$warning_time = $this->user->lang['WARNING_EXPIRED'];
+			if ($row['warning_end'])
+			{
+				$warning_time = $this->user->format_date($row['warning_end']);
+			}
+			else if (($row['warning_end'] == 0) && $row['warning_status'])
+			{
+				$warning_time = $this->user->lang['PERMANENT'];
+			}
+			// <--
+
 			$warning = unserialize($row['log_data']);
 
 			$user[] = [
-				'U_EDIT'            => ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=-rxu-advancedwarnings-mcp-warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
+				'U_EDIT'			=> ($this->auth->acl_get('m_warn')) ? append_sid("{$this->phpbb_root_path}mcp.$this->php_ext", 'i=-rxu-advancedwarnings-mcp-warnings_module&amp;mode=' . (($row['post_id']) ? 'warn_post&amp;p=' . $row['post_id'] : 'warn_user') . '&amp;u=' . $user_id . '&amp;warn_id=' . $row['warning_id']) : '',
 
-				'USERNAME_FULL'	    => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
-				'USERNAME_COLOUR'   => ($row['user_colour']) ? '#' . $row['user_colour'] : '',
+				'USERNAME_FULL'		=> get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
+				'USERNAME_COLOUR'	> ($row['user_colour']) ? '#' . $row['user_colour'] : '',
 
-				'WARNING_TIME'      => ($row['warning_end']) ? $this->user->format_date($row['warning_end']) : $this->user->lang['PERMANENT'],
-				'WARNING'           => $warning[0],
-				'WARNINGS'          => $this->user->format_date($row['warning_time']),
-				'WARNING_STATUS'    => (bool) $row['warning_status'],
-				'WARNING_TYPE'      => ($row['warning_type'] == self::BAN) ? $this->user->lang['BAN'] : $this->user->lang['WARNING'],
+				'WARNING_TIME'		=> $warning_time,
+				'WARNING'			=> $warning[0],
+				'WARNINGS'			=> $this->user->format_date($row['warning_time']),
+				'WARNING_STATUS'	=> (bool) $row['warning_status'],
+				'WARNING_TYPE'		=> ($row['warning_type'] == self::BAN) ? $this->user->lang['BAN'] : $this->user->lang['WARNING'],
 				'U_WARNING_POST_URL'=> ($row['post_id']) ? append_sid("{$this->phpbb_root_path}viewtopic.$this->php_ext", 'p=' . $row['post_id'] . '#p' . $row['post_id']) : '',
 			];
 		}
