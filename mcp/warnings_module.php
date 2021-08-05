@@ -623,7 +623,7 @@ class warnings_module
 				$msg = $user->lang('FORM_INVALID');
 			}
 			$redirect = append_sid("{$phpbb_root_path}mcp.$phpEx", "i=notes&amp;mode=user_notes&amp;u=$user_id");
-			meta_refresh(2, $redirect);
+			//meta_refresh(2, $redirect);
 			trigger_error($msg . '<br /><br />' . $user->lang('RETURN_PAGE', '<a href="' . $redirect . '">', '</a>'));
 		}
 
@@ -731,7 +731,7 @@ class warnings_module
 			submit_pm('post', $lang['WARNING_PM_SUBJECT'], $pm_data, false);
 		}
 
-		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), [$user_row['username']]);
+		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), ['username' => $user_row['username']]);
 		$log_id = $phpbb_log->add('user', $user->data['user_id'], $user_row['user_ip'], 'LOG_USER_WARNING_BODY', time(), [$warning, 'reportee_id' => $user_row['user_id']]);
 
 		$sql_ary = [
@@ -755,14 +755,23 @@ class warnings_module
 		$cache->destroy('sql', WARNINGS_TABLE);
 
 		// We add this to the mod log too for moderators to see that a specific user got warned.
-		$sql = 'SELECT forum_id, topic_id
-			FROM ' . POSTS_TABLE . '
-			WHERE post_id = ' . $post_id;
-		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
+			// Bug fix with error when issuing a warning not related to a specific post -->
+		$log_ary = array();
+		if ($post_id)
+		{
+			$sql = 'SELECT forum_id, topic_id
+				FROM ' . POSTS_TABLE . '
+				WHERE post_id = ' . $post_id;
+			$result = $db->sql_query($sql);
+			$row = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+			$log_ary['forum_id'] = $row['forum_id'];
+			$log_ary['topic_id'] = $row['topic_id'];
+		}
+		$log_ary += array('username' => $user_row['username']);
 
-		$phpbb_log->add('mod', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), ['forum_id' => $row['forum_id'], 'topic_id' => $row['topic_id'], $user_row['username']]);
+		$phpbb_log->add('mod', $user->data['user_id'], $user->ip, 'LOG_USER_WARNING', time(), $log_ary);
+			// <--
 	}
 
 	/**
